@@ -12,9 +12,9 @@
 LED time_color_hour = { 0x00, 0x00, 0xFF };
 LED time_color_minute = { 0x00, 0x00, 0xFF };
 LED time_color_second = { 0x00, 0xFF, 0x00 };
-LED time_color_second_75 = { 0x00, 0xFF * 0.75, 0x00 };
-LED time_color_second_50 = { 0x00, 0xFF * 0.50, 0x00 };
-LED time_color_second_25 = { 0x00, 0xFF * 0.25, 0x00 };
+LED time_color_second_75 = { 0x00, 0xFF >> 1, 0x00 };
+LED time_color_second_50 = { 0x00, 0xFF >> 3, 0x00 };
+LED time_color_second_25 = { 0x00, 0xFF >> 5, 0x00 };
 LED normal_color = { 0xFF, 0x00, 0x00 };
 
 void show_clock(u_int n, struct time_t* time){
@@ -24,7 +24,7 @@ void show_clock(u_int n, struct time_t* time){
 			if(i == hour - 1 )
 				setLEDColor(i, time_color_hour.red, time_color_hour.green, time_color_hour.blue);
 			else if (i == hour - 2  || i == hour)
-				setLEDColor(i, time_color_hour.red / 2, time_color_hour.green / 2, time_color_hour.blue / 2);
+				setLEDColor(i, time_color_hour.red >> 3, time_color_hour.green >> 3, time_color_hour.blue >> 3);
 			else if ( i == time->minute - 1 )
 				setLEDColor(i, time_color_minute.red, time_color_minute.green, time_color_minute.blue);
 			else if ( i == time->second - 1)
