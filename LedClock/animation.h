@@ -19,6 +19,6 @@ extern LED time_color_second_25;
 extern LED normal_color;
 extern u_char brightness;
 
-extern void show_clock(u_int n, struct time_t* time);
+extern void show_clock(struct time_t* time);
 
 #endif /* COLORS_H_ */

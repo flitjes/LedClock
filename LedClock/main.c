@@ -82,9 +82,11 @@ char time_str[25];
 __interrupt void TIMER0_A0_ISR_HOOK(void)
 {
 	tick();
-	/*sprintf(time_str, "Time: %d:%d:%d\n", current.hour, current.minute, current.second);
-	print_string(time_str);*/
-	show_clock(60, &current);
+#ifdef DEBUG
+	sprintf(time_str, "Time: %d:%d:%d\n", current.hour, current.minute, current.second);
+	print_string(time_str);
+#endif
+	show_clock(&current);
 }
 
 
