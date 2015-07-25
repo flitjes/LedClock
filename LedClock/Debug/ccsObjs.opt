@@ -1,1 +1,0 @@
-"./animation.obj" "./main.obj" "./serial.obj" "./time.obj" "./ws2812.obj" "../lnk_msp430g2553.cmd" -l"./configPkg/linker.cmd" -l"libc.a" 
