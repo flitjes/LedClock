@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker Unix v4.4.4                    
 ******************************************************************************
->> Linked Sat Jul 25 12:35:53 2015
+>> Linked Sat Jul 25 12:54:51 2015
 
 OUTPUT FILE NAME:   <LedClock.out>
 ENTRY POINT SYMBOL: "_c_int00_noargs_noexit"  address: 0000cb92

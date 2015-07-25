@@ -11,7 +11,7 @@ LED leds[NUM_LEDS] = {{0,0,0}};
 void initStrip(){
 	P1SEL |= OUTPUT_PIN;			// configure output pin as SPI output
 	P1SEL2 |= OUTPUT_PIN;
-	UCB0CTL0 |= UCCKPH + UCMSB + UCMST + UCSYNC; 	// 3-pin, MSB, 8-bit SPI master
+	UCB0CTL0 |= UCCKPH + UCMSB + UCMST + UCSYNC + UCMODE0; 	// 3-pin, MSB, 8-bit SPI master
 	UCB0CTL1 |= UCSSEL_2;			// SMCLK source (16 MHz)
 	UCB0BR0 = 3;					// 16 MHz / 3 = .1875 us per bit
 	UCB0BR1 = 0;
