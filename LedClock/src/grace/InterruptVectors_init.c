@@ -72,4 +72,3 @@ void InterruptVectors_graceInit(void)
  *
  *    __bic_SR_register_on_exit(LPMx_bits);
  */
-

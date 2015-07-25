@@ -12,6 +12,7 @@ extern "C" {
 void GPIO_graceInit(void);
 void BCSplus_graceInit(void);
 void USCI_A0_graceInit(void);
+void ADC10_graceInit(void);
 void InterruptVectors_graceInit(void);
 void System_graceInit(void);
 void Timer0_A3_graceInit(void);

@@ -14,6 +14,7 @@
 #include "serial.h"
 #include "time.h"
 #include "state.h"
+#include "debug.h"
 
 char input_buffer[SERIAL_BUF_SIZE];
 uint8_t input_count = 0;

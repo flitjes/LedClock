@@ -8,6 +8,7 @@
 #ifndef STATE_H_
 #define STATE_H_
 #include "serial.h"
+#include "debug.h"
 
 #ifdef DEBUG
 #define print_state(x) print_string(x)

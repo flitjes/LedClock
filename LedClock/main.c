@@ -13,9 +13,8 @@
 #include "ws2812.h"
 #include "state.h"
 #include "animation.h"
-
-//#define DEBUG
-
+#include <stdint.h>
+#include "debug.h"
 CLOCK_STATE current_state = INIT;
 
 /*
@@ -73,18 +72,34 @@ int main(void)
 		}
     }
 
-
-
-    return (0);
 }
-char time_str[25];
+#ifdef DEBUG
+char debug_str[25];
+#endif
+
 #pragma vector=TIMER0_A0_VECTOR
 __interrupt void TIMER0_A0_ISR_HOOK(void)
 {
+	uint16_t LDR_value = 0;
+	//ADC start conversion - software trigger
+	ADC10CTL0 |= ADC10SC;
+
+	// Loop until ADC10IFG is set indicating ADC conversion complete
+	while ((ADC10CTL0 & ADC10IFG) == 0);
+
+	LDR_value = ADC10MEM;
+	/* 1024 == complete darkness
+	 * 0 == light overload
+	 * Converting the ADC value straight to a percentage 0 - 100
+	 */
+	brightness = LDR_value / 10;
+
 	tick();
 #ifdef DEBUG
-	sprintf(time_str, "Time: %d:%d:%d\n", current.hour, current.minute, current.second);
-	print_string(time_str);
+	sprintf(debug_str, "LDR: %d brightness %d\n", LDR_value, brightness);
+	print_string(debug_str);
+	sprintf(debug_str, "Time: %d:%d:%d\n", current.hour, current.minute, current.second);
+	print_string(debug_str);
 #endif
 	show_clock(&current);
 }
