@@ -53,13 +53,13 @@ void GPIO_graceInit(void)
     /* USER CODE END (section: GPIO_graceInit_prologue) */
 
     /* Port 1 Port Select 2 Register */
-    P1SEL2 = BIT1 | BIT2 | BIT5 | BIT7;
+    P1SEL2 = BIT1 | BIT2 | BIT5 | BIT6 | BIT7;
 
     /* Port 1 Output Register */
     P1OUT = 0;
 
     /* Port 1 Port Select Register */
-    P1SEL = BIT1 | BIT2 | BIT5 | BIT7;
+    P1SEL = BIT1 | BIT2 | BIT5 | BIT6 | BIT7;
 
     /* Port 1 Direction Register */
     P1DIR = 0;

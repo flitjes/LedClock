@@ -23,6 +23,7 @@ CLOCK_STATE current_state = INIT;
 //u_int numLEDs = 60;
 int main(void)
 {
+	//During Grace init P1.6 and P1.7 are configured as I2C for the RTC
     Grace_init();                   // Activate Grace-generated configuration
     struct time_t debug_time = { 2, 30, 00};
     struct time_t parsed;

@@ -44,6 +44,9 @@ void Grace_init(void)
     /* initialize Config for the MSP430 USCI_A0 */
     USCI_A0_graceInit();
 
+    /* initialize Config for the MSP430 USCI_B0 */
+    USCI_B0_graceInit();
+
     /* initialize Config for the MSP430 10-bit Analog to Digital Converter (ADC) */
     ADC10_graceInit();
 
