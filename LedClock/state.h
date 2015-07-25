@@ -10,12 +10,6 @@
 #include "serial.h"
 #include "debug.h"
 
-#ifdef DEBUG
-#define print_state(x) print_string(x)
-#else
-#define print_state(x)
-#endif
-
 typedef enum {
 	INIT,
 	SET_TIME,

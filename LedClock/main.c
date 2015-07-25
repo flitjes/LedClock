@@ -73,9 +73,6 @@ int main(void)
     }
 
 }
-#ifdef DEBUG
-char debug_str[25];
-#endif
 
 #pragma vector=TIMER0_A0_VECTOR
 __interrupt void TIMER0_A0_ISR_HOOK(void)
