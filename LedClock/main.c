@@ -24,6 +24,8 @@ CLOCK_STATE current_state = INIT;
 int main(void)
 {
 	//During Grace init P1.6 and P1.7 are configured as I2C for the RTC
+	//I2C example usage of library
+	//https://github.com/lihouyu/ClockNTemperature/blob/master/ds3231.c
     Grace_init();                   // Activate Grace-generated configuration
     struct time_t debug_time = { 2, 30, 00};
     struct time_t parsed;

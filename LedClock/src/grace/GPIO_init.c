@@ -71,13 +71,13 @@ void GPIO_graceInit(void)
     P1IFG = 0;
 
     /* Port 2 Output Register */
-    P2OUT = 0;
+    P2OUT = BIT5;
 
     /* Port 2 Port Select Register */
     P2SEL &= ~(BIT6 | BIT7);
 
     /* Port 2 Direction Register */
-    P2DIR = 0;
+    P2DIR = BIT5;
 
     /* Port 2 Interrupt Edge Select Register */
     P2IES = 0;
