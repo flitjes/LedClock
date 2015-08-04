@@ -15,26 +15,35 @@
 #include "animation.h"
 #include <stdint.h>
 #include "debug.h"
+#include "DS1307.h"
+#include "TI_USCI_I2C_master.h"
 CLOCK_STATE current_state = INIT;
 
 /*
  *  ======== main ========
  */
 //u_int numLEDs = 60;
+struct time_t rtc = { 0, 0, 0 };
 int main(void)
 {
 	//During Grace init P1.6 and P1.7 are configured as I2C for the RTC
 	//I2C example usage of library
 	//https://github.com/lihouyu/ClockNTemperature/blob/master/ds3231.c
     Grace_init();                   // Activate Grace-generated configuration
-    struct time_t debug_time = { 2, 30, 00};
+    struct time_t debug_time = { 10, 0, 0};
     struct time_t parsed;
-
+    char time[25];
+    P1OUT &= ~(BIT5);
+    ds1307_get_time(&rtc);
+    //ds1307_set_time(&debug_time);
+	sprintf(time, "RTC Time: %d:%d:%d\n", rtc.hour, rtc.minute, rtc.second);
+	print_string(time);
     // >>>>> Fill-in user code here <<<<<
     for(;;){
 		switch(current_state){
 		    case INIT:
 		    	print_state("INIT\n");
+		    	P1OUT |= BIT5;
 		    	// initialize LED strip
 				initStrip();
 
@@ -95,6 +104,7 @@ __interrupt void TIMER0_A0_ISR_HOOK(void)
 	brightness = LDR_value / 10;
 
 	tick();
+
 #ifdef DEBUG
 	sprintf(debug_str, "LDR: %d brightness %d\n", LDR_value, brightness);
 	print_string(debug_str);
@@ -104,4 +114,20 @@ __interrupt void TIMER0_A0_ISR_HOOK(void)
 	show_clock(&current);
 }
 
+#pragma vector=USCIAB0RX_VECTOR
+__interrupt void USCI0RX_ISR_HOOK(void){
+	if(IFG2 & UCA0RXIFG){
+		USCI0RXSerialInterruptHandler();
+	}
+
+	if(IFG2 & UCB0RXIFG){
+		USCI0RXI2CInterruptHandler();
+	}
+}
+
+
+#pragma vector = USCIAB0TX_VECTOR
+__interrupt void USCIAB0TX_ISR(void){
+	USCI0TXI2CInterruptHandler();
+}
 

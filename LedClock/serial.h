@@ -14,5 +14,6 @@ extern char input_buffer[];
 extern uint8_t input_count;
 
 extern void print_string(char* str);
+extern void USCI0RXSerialInterruptHandler(void);
 
 #endif /* SRC_SERIAL_H_ */

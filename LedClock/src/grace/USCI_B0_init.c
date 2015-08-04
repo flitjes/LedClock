@@ -66,6 +66,15 @@ void USCI_B0_graceInit(void)
      */
     UCB0CTL1 = UCSSEL_2 | UCSWRST;
     
+    /* 
+     * I2C Own Address Register
+     * 
+     * ~UCGCEN -- Do not respond to a general call
+     * 
+     * Note: ~UCGCEN indicates that UCGCEN has value zero
+     */
+    UCB0I2COA = 16;
+    
     /* Bit Rate Control Register 0 */
     UCB0BR0 = 160;
     

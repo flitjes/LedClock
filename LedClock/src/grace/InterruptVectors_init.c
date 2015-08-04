@@ -67,13 +67,6 @@ void InterruptVectors_graceInit(void)
  *
  *    __bic_SR_register_on_exit(LPMx_bits);
  */
-#pragma vector=USCIAB0TX_VECTOR
-__interrupt void USCI0TX_ISR_HOOK(void)
-{
-    /* USER CODE START (section: USCI0TX_ISR_HOOK) */
-    /* replace this comment with your code */
-    /* USER CODE END (section: USCI0TX_ISR_HOOK) */
-}
 
 /*
  *  ======== USCI A0/B0 RX Interrupt Handler Generation ========

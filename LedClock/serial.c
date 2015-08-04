@@ -34,8 +34,7 @@ void print_string(char* str){
 	while (!(IFG2&UCA0TXIFG));
 }
 
-#pragma vector=USCIAB0RX_VECTOR
-__interrupt void USCI0RX_ISR_HOOK(void)
+void USCI0RXSerialInterruptHandler(void)
 {
     /* USER CODE START (section: USCI0RX_ISR_HOOK) */
     /* replace this comment with your code */
