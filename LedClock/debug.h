@@ -8,7 +8,7 @@
 #ifndef DEBUG_H_
 #define DEBUG_H_
 #include "serial.h"
-//#define DEBUG
+#define DEBUG
 
 #ifdef DEBUG
 char debug_str[25];

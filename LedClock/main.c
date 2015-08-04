@@ -22,32 +22,31 @@ CLOCK_STATE current_state = INIT;
 /*
  *  ======== main ========
  */
-//u_int numLEDs = 60;
-struct time_t rtc = { 0, 0, 0 };
+
 int main(void)
 {
 	//During Grace init P1.6 and P1.7 are configured as I2C for the RTC
-	//I2C example usage of library
-	//https://github.com/lihouyu/ClockNTemperature/blob/master/ds3231.c
+
     Grace_init();                   // Activate Grace-generated configuration
-    struct time_t debug_time = { 10, 0, 0};
     struct time_t parsed;
-    char time[25];
+    struct time_t rtc = { 0, 0, 0 };
+
     P1OUT &= ~(BIT5);
     ds1307_get_time(&rtc);
     //ds1307_set_time(&debug_time);
-	sprintf(time, "RTC Time: %d:%d:%d\n", rtc.hour, rtc.minute, rtc.second);
-	print_string(time);
+
     // >>>>> Fill-in user code here <<<<<
     for(;;){
 		switch(current_state){
 		    case INIT:
 		    	print_state("INIT\n");
+		    	/*Switch to SPI*/
 		    	P1OUT |= BIT5;
+
 		    	// initialize LED strip
 				initStrip();
 
-				set_time(&debug_time);
+				set_time(&rtc);
 				// set strip color red
 				fillStrip(0xFF, 0x00, 0x00);
 

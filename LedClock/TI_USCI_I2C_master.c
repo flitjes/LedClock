@@ -53,7 +53,7 @@ unsigned char *TI_transmit_field;
 //-----------------------------------------------------------------------------
 void TI_USCI_I2C_receiveinit(unsigned char slave_address,
                              unsigned char prescale){
-	UCB0CTL1 = UCSWRST;                        // Enable SW reset
+	UCB0CTL1 |= UCSWRST;                        // Enable SW reset
 	UCB0CTL0 = UCMST + UCMODE_3 + UCSYNC;       // I2C Master, synchronous mode
 	UCB0CTL1 = UCSSEL_2 + UCSWRST;              // Use SMCLK, keep SW reset
 	UCB0BR0 = prescale;                         // set prescaler
@@ -61,7 +61,7 @@ void TI_USCI_I2C_receiveinit(unsigned char slave_address,
 	UCB0I2CSA = slave_address;                  // set slave address
 	UCB0CTL1 &= ~UCSWRST;                       // Clear SW reset, resume operation
 	UCB0I2CIE = UCNACKIE;
-	IE2 = UCB0RXIE;                            // Enable RX interrupt
+	IE2 |= UCB0RXIE;                            // Enable RX interrupt
 }
 
 //------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ void TI_USCI_I2C_receiveinit(unsigned char slave_address,
 //------------------------------------------------------------------------------
 void TI_USCI_I2C_transmitinit(unsigned char slave_address, 
                           unsigned char prescale){
-	UCB0CTL1 = UCSWRST;                        // Enable SW reset
+	UCB0CTL1 |= UCSWRST;                        // Enable SW reset
 	UCB0CTL0 = UCMST + UCMODE_3 + UCSYNC;       // I2C Master, synchronous mode
 	UCB0CTL1 = UCSSEL_2 + UCSWRST;              // Use SMCLK, keep SW reset
 	UCB0BR0 = prescale;                         // set prescaler
@@ -83,7 +83,7 @@ void TI_USCI_I2C_transmitinit(unsigned char slave_address,
 	UCB0I2CSA = slave_address;                  // Set slave address
 	UCB0CTL1 &= ~UCSWRST;                       // Clear SW reset, resume operation
 	UCB0I2CIE = UCNACKIE;
-	IE2 = UCB0TXIE;                            // Enable TX ready interrupt
+	IE2 |= UCB0TXIE;                            // Enable TX ready interrupt
 }
 
 //------------------------------------------------------------------------------
