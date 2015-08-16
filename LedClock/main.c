@@ -31,7 +31,8 @@ int main(void)
     struct time_t parsed;
     struct time_t rtc = { 0, 0, 0 };
 
-    P1OUT &= ~(BIT5);
+    /*Switch to I2C*/
+    P2OUT &= ~(BIT5);
     ds1307_get_time(&rtc);
     //ds1307_set_time(&debug_time);
 
@@ -41,7 +42,7 @@ int main(void)
 		    case INIT:
 		    	print_state("INIT\n");
 		    	/*Switch to SPI*/
-		    	P1OUT |= BIT5;
+		    	P2OUT |= BIT5;
 
 		    	// initialize LED strip
 				initStrip();
@@ -63,6 +64,16 @@ int main(void)
 		    	print_state("SET_TIME\n");
 				parse_time(time_formated+1, &parsed);
 				set_time(&parsed);
+				/*Switch to I2C*/
+				P2OUT &= ~(BIT5);
+
+				ds1307_set_time(&parsed);
+
+				/*Switch to SPI*/
+				P2OUT |= BIT5;
+				// initialize LED strip
+				initStrip();
+
 				f_time_set = 0;
 				current_state = STOP;
 				print_state("STOP\n");
