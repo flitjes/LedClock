@@ -9,7 +9,7 @@
 #define DEBUG_H_
 #include "serial.h"
 //#define DEBUG
-#define DEBUG_STATE_MACHINE
+//#define DEBUG_STATE_MACHINE
 
 
 char debug_str[25];
