@@ -18,7 +18,7 @@
 #include "DS1307.h"
 #include "TI_USCI_I2C_master.h"
 CLOCK_STATE current_state = INIT;
-
+uint8_t allignment_offset = 30;
 /*
  *  ======== main ========
  */
@@ -45,7 +45,7 @@ int main(void)
 		    	P2OUT |= BIT5;
 
 		    	// initialize LED strip
-				initStrip();
+				initStrip(allignment_offset);
 
 				set_time(&rtc);
 				// set strip color red
@@ -72,7 +72,7 @@ int main(void)
 				/*Switch to SPI*/
 				P2OUT |= BIT5;
 				// initialize LED strip
-				initStrip();
+				initStrip(allignment_offset);
 
 				f_time_set = 0;
 				current_state = STOP;

@@ -1,5 +1,6 @@
 #ifndef WS2812_H_
 #define WS2812_H_
+#include <stdint.h>
 // Useful typedefs
 typedef unsigned char u_char;		// 8 bit
 typedef unsigned int u_int;			// 16 bit
@@ -9,7 +10,7 @@ typedef unsigned int u_int;			// 16 bit
 #define LOW_CODE	(0xC0)			// b11000000
 
 // Configure processor to output to data strip
-void initStrip(void);
+void initStrip(uint8_t offset);
 
 // Send colors to the strip and show them. Disables interrupts while processing.
 void showStrip(void);

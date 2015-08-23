@@ -7,8 +7,10 @@
 
 LED leds[NUM_LEDS] = {{0,0,0}};
 
+static uint8_t led_0_offset;
+
 // Initializes everything needed to use this library. This clears the strip.
-void initStrip(){
+void initStrip(uint8_t offset){
 	/* Disable USCI */
 	UCB0CTL1 |= UCSWRST;
 
@@ -20,7 +22,7 @@ void initStrip(){
 	UCB0BR0 = 3;					// 16 MHz / 3 = .1875 us per bit
 	UCB0BR1 = 0;
 	UCB0CTL1 &= ~UCSWRST;			// Initialize USCI state machine
-
+	led_0_offset = offset;
 	clearStrip();					// clear the strip
 }
 
@@ -36,19 +38,28 @@ void showStrip(){
 	__bic_SR_register(GIE);       	// disable interrupts
 	
 	// send RGB color for every LED
-	int i, j;
-	for (i = 0; i < NUM_LEDS; i++){
-		u_char rgb[3] = {leds[i].green, leds[i].red, leds[i].blue};	// get RGB color for this LED
+	int iled, icolor;
+	uint8_t led_count = 0;
 
+	iled= led_0_offset;
+	while(led_count < NUM_LEDS){
+		u_char rgb[3];
+
+		if(iled >= NUM_LEDS)
+			iled = 0;
+
+		rgb[0] = leds[iled].green;
+		rgb[1] = leds[iled].red;
+		rgb[2] = leds[iled].blue;
 		// send green, then red, then blue
-		for (j = 0; j < 3; j++){
+		for (icolor = 0; icolor < 3; icolor++){
 			u_char mask = 0x80;					// b1000000
 
 			// check each of the 8 bits
 			while(mask != 0){
 				while (!(IFG2 & UCB0TXIFG));	// wait to transmit
 
-				if (rgb[j] & mask){			// most significant bit first
+				if (rgb[icolor] & mask){			// most significant bit first
 					UCB0TXBUF = HIGH_CODE;		// send 1
 				}
 				else {
@@ -58,8 +69,9 @@ void showStrip(){
 				mask >>= 1;						// check next bit
 			}
 		}
+		iled++;
+		led_count++;
 	}
-
 	// send RES code for at least 50 us (800 cycles at 16 MHz)
 	_delay_cycles(800);
 
