@@ -48,10 +48,15 @@ void parse_time(char* time, struct time_t* parsed){
 	pch = strtok (NULL, delim);
 	parsed->second = atoi(pch);
 }
-char time_str[25];
+
 void set_time(struct time_t* time){
 	memcpy(&current, time, sizeof(struct time_t));
-	sprintf(time_str, "Set current time: %d:%d:%d\n", current.hour, current.minute, current.second);
+	print_time();
+}
+
+void print_time(){
+	char time_str[25];
+	sprintf(time_str, "Current time: %d:%d:%d\n", current.hour, current.minute, current.second);
 	print_string(time_str);
 }
 

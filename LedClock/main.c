@@ -17,7 +17,7 @@
 #include "debug.h"
 #include "DS1307.h"
 #include "TI_USCI_I2C_master.h"
-CLOCK_STATE current_state = INIT;
+
 uint8_t allignment_offset = 30;
 /*
  *  ======== main ========
@@ -36,11 +36,12 @@ int main(void)
     ds1307_get_time(&rtc);
     //ds1307_set_time(&debug_time);
 
+    switch_state(INIT);
+
     // >>>>> Fill-in user code here <<<<<
     for(;;){
 		switch(current_state){
 		    case INIT:
-		    	print_state("INIT\n");
 		    	/*Switch to SPI*/
 		    	P2OUT |= BIT5;
 
@@ -57,11 +58,9 @@ int main(void)
 				/* Clear MCx bits to stop timer */
 				TA0CTL &= ~(MC1 + MC0);
 				print_string("LedClock started\n");
-				current_state = STOP;
-				print_state("STOP\n");
+				switch_state(STOP);
 		    	break;
 		    case SET_TIME:
-		    	print_state("SET_TIME\n");
 				parse_time(time_formated+1, &parsed);
 				set_time(&parsed);
 				/*Switch to I2C*/
@@ -75,8 +74,7 @@ int main(void)
 				initStrip(allignment_offset);
 
 				f_time_set = 0;
-				current_state = STOP;
-				print_state("STOP\n");
+				switch_state(STOP);
 		    	break;
 		    case RUNNING:
 		    	//__delay_cycles(100000); //6.25 milisecond
@@ -84,12 +82,18 @@ int main(void)
 		    case START:
 		    	/* Start timer in up mode */
 		    	TA0CTL |= MC_1;
-		    	current_state = RUNNING;
-		    	print_state("RUNNING\n");
+				switch_state(RUNNING);
 		    	break;
 		    case STOP:
 		    	/* Clear MCx bits to stop timer */
 		    	TA0CTL &= ~(MC1 + MC0);
+		    	break;
+		    case PRINT_TIME:
+				print_time();
+				switch_state(previous_state);
+				break;
+		    default:
+		    	print_string("Non defined case, possible stack corruption\n");
 		    	break;
 		}
     }

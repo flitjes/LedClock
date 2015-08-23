@@ -9,12 +9,12 @@
 #define DEBUG_H_
 #include "serial.h"
 //#define DEBUG
+#define DEBUG_STATE_MACHINE
 
-#ifdef DEBUG
+
 char debug_str[25];
-#endif
 
-#ifdef DEBUG
+#ifdef DEBUG_STATE_MACHINE
 #define print_state(x) print_string(x)
 #else
 #define print_state(x)

@@ -52,18 +52,20 @@ void USCI0RXSerialInterruptHandler(void)
 			//value example 17:15:01
 			memcpy(time_formated, p, FORMATED_TIME_SIZE);
 			f_time_set = 1;
-			current_state = SET_TIME;
-			print_state("SET_TIME\n");
+			switch_state(SET_TIME);
 		}
 		if(strcmp(input_buffer, "stop") == 0){
-			current_state = STOP;
-			print_state("STOP\n");
+			switch_state(STOP);
 		} else {
 			if(strcmp(input_buffer, "start") == 0){
-				current_state=START;
-				print_state("START\n");
+				switch_state(START);
 			}
 		}
+
+		if(strcmp(input_buffer, "current_time") == 0){
+			switch_state(PRINT_TIME);
+		}
+
 		input_count = 0;
 		input_buffer[0] = '\0';
 

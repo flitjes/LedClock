@@ -31,5 +31,6 @@ extern uint8_t f_time_set;
 extern void tick(void);
 extern void parse_time(char* time, struct time_t* parsed);
 extern void set_time(struct time_t* time);
+extern void print_time(void);
 
 #endif /* SRC_TIME_H_ */
