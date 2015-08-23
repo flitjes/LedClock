@@ -82,6 +82,8 @@ int main(void)
 		    case STOP:
 		    	/* Clear MCx bits to stop timer */
 		    	TA0CTL &= ~(MC1 + MC0);
+		    	fillStrip(0x00, 0x00, 0x00);
+		    	showStrip();
 		    	break;
 		    case PRINT_TIME:
 				print_time();
@@ -115,32 +117,35 @@ __interrupt void USCIAB0TX_ISR(void){
 #pragma vector=PORT1_VECTOR
 __interrupt void PORT1_ISR_HOOK(void)
 {
-	if(P1IES & BIT3){
+	if(P1IFG & BIT3){
 		uint16_t LDR_value = 0;
 		P1IFG &= ~(BIT3);
+		if(P1IN & BIT4){
+			switch_state(START);
+			//ADC start conversion - software trigger
+			ADC10CTL0 |= ADC10SC;
 
-		//ADC start conversion - software trigger
-		ADC10CTL0 |= ADC10SC;
+			// Loop until ADC10IFG is set indicating ADC conversion complete
+			while ((ADC10CTL0 & ADC10IFG) == 0);
 
-		// Loop until ADC10IFG is set indicating ADC conversion complete
-		while ((ADC10CTL0 & ADC10IFG) == 0);
+			LDR_value = ADC10MEM;
+			/* 1024 == complete darkness
+			 * 0 == light overload
+			 * Converting the ADC value straight to a percentage 0 - 100
+			 */
+			brightness = LDR_value / 10;
+			tick();
 
-		LDR_value = ADC10MEM;
-		/* 1024 == complete darkness
-		 * 0 == light overload
-		 * Converting the ADC value straight to a percentage 0 - 100
-		 */
-		brightness = LDR_value / 10;
-
-		tick();
-
-	#ifdef DEBUG
-		sprintf(debug_str, "LDR: %d brightness %d\n", LDR_value, brightness);
-		print_string(debug_str);
-		sprintf(debug_str, "Time: %d:%d:%d\n", current.hour, current.minute, current.second);
-		print_string(debug_str);
-	#endif
-		show_clock(&current);
+		#ifdef DEBUG
+			sprintf(debug_str, "LDR: %d brightness %d\n", LDR_value, brightness);
+			print_string(debug_str);
+			sprintf(debug_str, "Time: %d:%d:%d\n", current.hour, current.minute, current.second);
+			print_string(debug_str);
+		#endif
+			show_clock(&current);
+		} else {
+			switch_state(STOP);
+		}
 
 	}
 }
