@@ -98,29 +98,7 @@ int main(void)
 #pragma vector=TIMER0_A0_VECTOR
 __interrupt void TIMER0_A0_ISR_HOOK(void)
 {
-	uint16_t LDR_value = 0;
-	//ADC start conversion - software trigger
-	ADC10CTL0 |= ADC10SC;
 
-	// Loop until ADC10IFG is set indicating ADC conversion complete
-	while ((ADC10CTL0 & ADC10IFG) == 0);
-
-	LDR_value = ADC10MEM;
-	/* 1024 == complete darkness
-	 * 0 == light overload
-	 * Converting the ADC value straight to a percentage 0 - 100
-	 */
-	brightness = LDR_value / 10;
-
-	tick();
-
-#ifdef DEBUG
-	sprintf(debug_str, "LDR: %d brightness %d\n", LDR_value, brightness);
-	print_string(debug_str);
-	sprintf(debug_str, "Time: %d:%d:%d\n", current.hour, current.minute, current.second);
-	print_string(debug_str);
-#endif
-	show_clock(&current);
 }
 
 #pragma vector=USCIAB0RX_VECTOR
@@ -138,4 +116,37 @@ __interrupt void USCI0RX_ISR_HOOK(void){
 #pragma vector = USCIAB0TX_VECTOR
 __interrupt void USCIAB0TX_ISR(void){
 	USCI0TXI2CInterruptHandler();
+}
+
+#pragma vector=PORT1_VECTOR
+__interrupt void PORT1_ISR_HOOK(void)
+{
+	if(P1IES & BIT3){
+		uint16_t LDR_value = 0;
+		P1IFG &= ~(BIT3);
+
+		//ADC start conversion - software trigger
+		ADC10CTL0 |= ADC10SC;
+
+		// Loop until ADC10IFG is set indicating ADC conversion complete
+		while ((ADC10CTL0 & ADC10IFG) == 0);
+
+		LDR_value = ADC10MEM;
+		/* 1024 == complete darkness
+		 * 0 == light overload
+		 * Converting the ADC value straight to a percentage 0 - 100
+		 */
+		brightness = LDR_value / 10;
+
+		tick();
+
+	#ifdef DEBUG
+		sprintf(debug_str, "LDR: %d brightness %d\n", LDR_value, brightness);
+		print_string(debug_str);
+		sprintf(debug_str, "Time: %d:%d:%d\n", current.hour, current.minute, current.second);
+		print_string(debug_str);
+	#endif
+		show_clock(&current);
+
+	}
 }
