@@ -95,12 +95,6 @@ int main(void)
 
 }
 
-#pragma vector=TIMER0_A0_VECTOR
-__interrupt void TIMER0_A0_ISR_HOOK(void)
-{
-
-}
-
 #pragma vector=USCIAB0RX_VECTOR
 __interrupt void USCI0RX_ISR_HOOK(void){
 	if(IFG2 & UCA0RXIFG){
