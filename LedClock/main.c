@@ -53,7 +53,7 @@ int main(void)
 				/* Clear MCx bits to stop timer */
 				TA0CTL &= ~(MC1 + MC0);
 				print_string("LedClock started\n");
-				switch_state(STOP);
+				switch_state(START);
 		    	break;
 		    case SET_TIME:
 				parse_time(time_formated+1, &parsed);
