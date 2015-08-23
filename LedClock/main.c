@@ -31,8 +31,9 @@ int main(void)
     struct time_t parsed;
     struct time_t rtc = { 0, 0, 0 };
 
+    ds1307_set_squarewave(1);
+
     ds1307_get_time(&rtc);
-    //ds1307_set_time(&debug_time);
 
     switch_state(INIT);
 
@@ -56,6 +57,9 @@ int main(void)
 				switch_state(START);
 		    	break;
 		    case SET_TIME:
+		    	/* Clear MCx bits to stop timer */
+		    	TA0CTL &= ~(MC1 + MC0);
+
 				parse_time(time_formated+1, &parsed);
 				set_time(&parsed);
 
@@ -65,7 +69,7 @@ int main(void)
 				initStrip(allignment_offset);
 
 				f_time_set = 0;
-				switch_state(STOP);
+				switch_state(START);
 		    	break;
 		    case RUNNING:
 		    	//__delay_cycles(100000); //6.25 milisecond
@@ -135,4 +139,3 @@ __interrupt void USCI0RX_ISR_HOOK(void){
 __interrupt void USCIAB0TX_ISR(void){
 	USCI0TXI2CInterruptHandler();
 }
-
