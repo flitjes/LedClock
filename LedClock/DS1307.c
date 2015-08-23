@@ -50,3 +50,49 @@ void ds1307_get_time(struct time_t* t){
 
 }
 
+void i2c_get_value(unsigned char i2c_dev, unsigned char reg, unsigned char* dest, uint8_t count){
+	__enable_interrupt();
+	/*Init i2c transfer*/
+	TI_USCI_I2C_transmitinit(i2c_dev, I2C_PRESCALER);
+	while ( TI_USCI_I2C_notready() );
+	/*Set read pointer*/
+	TI_USCI_I2C_transmit(1, &reg);
+	while ( TI_USCI_I2C_notready() );
+	/*Init i2c read*/
+	TI_USCI_I2C_receiveinit(i2c_dev, I2C_PRESCALER);
+	while ( TI_USCI_I2C_notready() );
+	/*Receive*/
+	TI_USCI_I2C_receive(count, &dest[0]);
+	while ( TI_USCI_I2C_notready() );
+}
+
+void i2c_set_value(unsigned char i2c_dev, unsigned char reg,unsigned char* data, uint8_t count){
+	__enable_interrupt();
+	unsigned char* transfer = (unsigned char*)malloc(count);
+	memcpy(transfer, &reg, 1);
+	memcpy(transfer+1, data, count);
+
+	TI_USCI_I2C_transmitinit(i2c_dev, I2C_PRESCALER);
+	while ( TI_USCI_I2C_notready() );
+	TI_USCI_I2C_transmit(count + 1, transfer);
+	while ( TI_USCI_I2C_notready() );
+}
+
+void ds1307_set_squarewave(uint8_t wave){
+	unsigned char ctrl = 0;
+	i2c_get_value(DS1307_ADDR, DS1307_ADDR_CONTROL, &ctrl, 1);
+	char buf[2];
+	sprintf(buf, "%x\n", ctrl);
+	print_string(buf);
+	if(wave & BIT0){
+		ctrl |= DS1307_CTRL_SQWE;
+	} else {
+		ctrl &= ~(DS1307_CTRL_SQWE);
+	}
+	sprintf(buf, "%x\n", ctrl);
+	print_string(buf);
+	i2c_set_value(DS1307_ADDR, DS1307_ADDR_CONTROL, &ctrl, 1);
+
+}
+
+

@@ -52,6 +52,10 @@
 
 extern void ds1307_set_time(struct time_t* t);
 extern void ds1307_get_time(struct time_t* t);
+extern void ds1307_set_squarewave(uint8_t wave);
+
+extern void i2c_get_value(unsigned char i2c_dev, unsigned char reg, unsigned char* dest, uint8_t count);
+extern void i2c_set_value(unsigned char i2c_dev, unsigned char reg,unsigned char* data, uint8_t count);
 
 
 #endif /* DS1307_H_ */
