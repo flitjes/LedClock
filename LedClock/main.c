@@ -120,6 +120,8 @@ __interrupt void PORT1_ISR_HOOK(void)
 	if(P1IFG & BIT3){
 		uint16_t LDR_value = 0;
 		P1IFG &= ~(BIT3);
+		tick();
+
 		if(P1IN & BIT4){
 			switch_state(START);
 			//ADC start conversion - software trigger
@@ -134,7 +136,6 @@ __interrupt void PORT1_ISR_HOOK(void)
 			 * Converting the ADC value straight to a percentage 0 - 100
 			 */
 			brightness = LDR_value / 10;
-			tick();
 
 		#ifdef DEBUG
 			sprintf(debug_str, "LDR: %d brightness %d\n", LDR_value, brightness);
