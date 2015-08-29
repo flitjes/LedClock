@@ -19,64 +19,62 @@ LED time_color_second_50 = { 0x00, 0xFF >> 3, 0x00 };
 LED time_color_second_25 = { 0x00, 0xFF >> 5, 0x00 };
 LED normal_color = { 0xFF, 0x00, 0x00 };
 
-u_char brightness = 10;
-void show_clock(struct time_t* time){
-	int i;
-		char hour = time->hour * 5;
-		LED set_color;
-		for (i = 0; i < LED_COUNT; i++){			// n is number of LEDs
-			if(i == hour - 1 ){
-				set_color.red = time_color_hour.red;
-				set_color.green = time_color_hour.green;
-				set_color.blue = time_color_hour.blue;
-			}
-			else if (i == hour - 2  || i == hour){
-				set_color.red = time_color_hour.red >> 3;
-				set_color.green = time_color_hour.green >> 3;
-				set_color.blue = time_color_hour.blue >> 3;
-			}
-			else if ( i == time->minute - 1 ){
-				set_color.red = time_color_minute.red;
-				set_color.green = time_color_minute.green;
-				set_color.blue = time_color_minute.blue;
-			}
-			else if ( i == time->second - 1){
-				set_color.red = time_color_second.red;
-				set_color.green = time_color_second.green;
-				set_color.blue = time_color_second.blue;
-			}
-			else if ( i == time->second - 2){
-				set_color.red = time_color_second.red >> 1;
-				set_color.green = time_color_second.green >> 1;
-				set_color.blue = time_color_second.blue >> 1;
-			}
-			else if ( i == time->second - 3){
-				set_color.red = time_color_second.red >> 3;
-				set_color.green = time_color_second.green >> 3;
-				set_color.blue = time_color_second.blue >> 3;
-			}
-			else if ( i == time->second - 4){
-				set_color.red = time_color_second.red >> 5;
-				set_color.green = time_color_second.green >> 5;
-				set_color.blue = time_color_second.blue >> 5;
-			}
-			else {
-				set_color.red = normal_color.red;
-				set_color.green = normal_color.green;
-				set_color.blue = normal_color.blue;
-			}
+static void compensate_brightness(LED* led){
+	u_int c;
+	c = ((led->red * brightness) / 100);
+	led->red = c & 0xFF;
+	c = ((led->green * brightness) / 100);
+	led->green = c & 0xFF;
+	c = ((led->blue * brightness) / 100);
+	led->blue = c & 0xFF;
 
-			u_int c;
-			c = ((set_color.red * brightness) / 100);
-			set_color.red = c & 0xFF;
-			c = ((set_color.green * brightness) / 100);
-			set_color.green = c & 0xFF;
-			c = ((set_color.blue * brightness) / 100);
-			set_color.blue = c & 0xFF;
-
-			setLEDColor(i,set_color.red, set_color.green, set_color.blue);
-
-		}
-		showStrip();
 }
 
+static void setLedColorBrCtrl(uint8_t index, LED* led){
+	LED set_color;
+	memcpy(&set_color, led, sizeof(LED));
+	compensate_brightness(&set_color);
+	setLEDColor(index, set_color.red, set_color.green, set_color.blue);
+}
+u_char brightness = 10;
+void show_clock(struct time_t* time){
+	int8_t i;
+	uint8_t led_count, led_after_glow, led_after_glow_left;
+	LED set_color;
+	for (i = 0; i < LED_COUNT; i++){			// n is number of LEDs
+		setLedColorBrCtrl(i, &normal_color);
+	}
+
+	led_count  = time->hour * 5;
+	set_color.red = time_color_hour.red >> 3;
+	set_color.green = time_color_hour.green >> 3;
+	set_color.blue = time_color_hour.blue >> 3;
+
+	if(led_count == NUM_LEDS){
+		setLedColorBrCtrl(led_count - 2, &set_color);
+		setLedColorBrCtrl(led_count - 1, &time_color_hour);
+		setLedColorBrCtrl(0, &set_color);
+	} else if(led_count != NUM_LEDS) {
+		setLedColorBrCtrl(led_count - 1, &set_color);
+		setLedColorBrCtrl(led_count, &time_color_hour);
+		setLedColorBrCtrl(led_count + 1, &set_color);
+	}
+
+	setLedColorBrCtrl(time->minute, &time_color_minute);
+
+	led_after_glow = 4;
+	led_after_glow_left = led_after_glow;
+
+	for(i = time->second; i >= 0 && i > time->second - led_after_glow; i--){
+		setLedColorBrCtrl(i, &time_color_second);
+		led_after_glow_left--;
+	}
+	/*Compensate for the fact it's a linear strip and a clock is round*/
+	if(led_after_glow_left > 0){
+		for(i = NUM_LEDS - 1; i > (NUM_LEDS - 1) - led_after_glow_left; i--){
+			setLedColorBrCtrl(i, &time_color_second);
+		}
+	}
+
+	showStrip();
+}

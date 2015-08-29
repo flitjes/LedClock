@@ -3,8 +3,6 @@
 
 #define OUTPUT_PIN	(0x80)			// Set to whatever UCB0SIMO is on your processor (Px.7 here)
 
-#define NUM_LEDS	(60)			// NUMBER OF LEDS IN YOUR STRIP
-
 LED leds[NUM_LEDS] = {{0,0,0}};
 
 static uint8_t led_0_offset;

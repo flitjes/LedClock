@@ -9,6 +9,8 @@ typedef unsigned int u_int;			// 16 bit
 #define HIGH_CODE	(0xF0)			// b11110000
 #define LOW_CODE	(0xC0)			// b11000000
 
+#define NUM_LEDS	(60)			// NUMBER OF LEDS IN YOUR STRIP
+
 // Configure processor to output to data strip
 void initStrip(uint8_t offset);
 
