@@ -135,7 +135,11 @@ __interrupt void PORT1_ISR_HOOK(void)
 			 * 0 == light overload
 			 * Converting the ADC value straight to a percentage 0 - 100
 			 */
-			brightness = LDR_value / 10;
+			LDR_value = LDR_value / 10 + 30;
+			if(LDR_value > 100)
+				brightness = 100;
+			else
+				brightness = LDR_value;
 
 		#ifdef DEBUG
 			sprintf(debug_str, "LDR: %d brightness %d\n", LDR_value, brightness);
