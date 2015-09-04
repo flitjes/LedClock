@@ -1,0 +1,150 @@
+Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = Fri 04 Sep 2015 08:43:04 PM CEST
+
+BeginCmp
+TimeStamp = /55E4B1CB;
+Reference = C100uF1;
+ValeurCmp = 100uF;
+IdModule  = SM1206;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E4B2A9;
+Reference = C100uF2;
+ValeurCmp = 100uF;
+IdModule  = SM1206;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E9DB43;
+Reference = ESP1;
+ValeurCmp = ESP-03;
+IdModule  = ESP-03;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E4A411;
+Reference = KLedStrip1;
+ValeurCmp = LedStrip;
+IdModule  = bornier3;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E4A8ED;
+Reference = KPIR1;
+ValeurCmp = PIR;
+IdModule  = PIN_ARRAY_3X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E4A402;
+Reference = PPower1;
+ValeurCmp = Power;
+IdModule  = bornier2;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E4A637;
+Reference = PRTC1;
+ValeurCmp = RTC;
+IdModule  = PIN_ARRAY-6X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E4B652;
+Reference = PUartSel1;
+ValeurCmp = UartSel;
+IdModule  = pin_array_4x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E89C0E;
+Reference = R1;
+ValeurCmp = 10K;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E89C1D;
+Reference = R2;
+ValeurCmp = 10K;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E9E6E3;
+Reference = R3;
+ValeurCmp = 10K;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E4AC72;
+Reference = R10k1;
+ValeurCmp = 10K;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E4BF64;
+Reference = R46k1;
+ValeurCmp = 46K;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E4BF73;
+Reference = R46K2;
+ValeurCmp = 46K;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E4A9C6;
+Reference = RLDR1;
+ValeurCmp = LDR;
+IdModule  = R1;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E4BF91;
+Reference = SWProg1;
+ValeurCmp = SW_PUSH;
+IdModule  = SW_PUSH_SMALL;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E4BF82;
+Reference = SWReset1;
+ValeurCmp = SW_PUSH;
+IdModule  = SW_PUSH_SMALL;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E4A038;
+Reference = U1;
+ValeurCmp = MSP430G2553IPW20;
+IdModule  = DIP-20__300;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E4A0A5;
+Reference = UartToSerial1;
+ValeurCmp = FT232RL;
+IdModule  = SSOP28;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E4A113;
+Reference = Uref1;
+ValeurCmp = LM317EMP;
+IdModule  = SOT223;
+EndCmp
+
+BeginCmp
+TimeStamp = /55E4A13E;
+Reference = USB_SERIAL1;
+ValeurCmp = USB-MINI-B;
+IdModule  = USB_MINI_B;
+EndCmp
+
+EndListe

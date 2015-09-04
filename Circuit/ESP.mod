@@ -1,0 +1,114 @@
+PCBNEW-LibModule-V1  Wed 02 Sep 2015 09:03:11 PM CEST
+# encoding utf-8
+Units mm
+$INDEX
+ESP-03
+$EndINDEX
+$MODULE ESP-03
+Po 0 0 0 15 55E7472A 00000000 ~~
+Li ESP-03
+Sc 0
+AR 
+Op 0 0 0
+T0 0 2.54 1 1 0 0.15 N V 21 N "ESP-03"
+T1 0 11.43 1 1 0 0.15 N V 21 N "ESP**"
+$PAD
+Sh "1" R 0.5 1 0 0 0
+Dr 0 -0.25 0
+At SMD N 00888000
+Ne 0 ""
+Po 6.08 17.45
+$EndPAD
+$PAD
+Sh "2" R 0.5 1 0 0 0
+Dr 0 -0.25 0
+At SMD N 00888000
+Ne 0 ""
+Po 6.08 15.45
+$EndPAD
+$PAD
+Sh "3" R 0.5 1 0 0 0
+Dr 0 -0.25 0
+At SMD N 00888000
+Ne 0 ""
+Po 6.08 13.45
+$EndPAD
+$PAD
+Sh "4" R 0.5 1 0 0 0
+Dr 0 -0.25 0
+At SMD N 00888000
+Ne 0 ""
+Po 6.08 11.45
+$EndPAD
+$PAD
+Sh "5" R 0.5 1 0 0 0
+Dr 0 -0.25 0
+At SMD N 00888000
+Ne 0 ""
+Po 6.08 9.45
+$EndPAD
+$PAD
+Sh "6" R 0.5 1 0 0 0
+Dr 0 -0.25 0
+At SMD N 00888000
+Ne 0 ""
+Po 6.08 7.45
+$EndPAD
+$PAD
+Sh "7" R 0.5 1 0 0 0
+Dr 0 -0.25 0
+At SMD N 00888000
+Ne 0 ""
+Po 6.08 5.45
+$EndPAD
+$PAD
+Sh "8" R 0.5 1 0 0 0
+Dr 0 0.25 0
+At SMD N 00888000
+Ne 0 ""
+Po -6.08 17.45
+$EndPAD
+$PAD
+Sh "9" R 0.5 1 0 0 0
+Dr 0 0.25 0
+At SMD N 00888000
+Ne 0 ""
+Po -6.08 15.45
+$EndPAD
+$PAD
+Sh "10" R 0.5 1 0 0 0
+Dr 0 0.25 0
+At SMD N 00888000
+Ne 0 ""
+Po -6.08 13.45
+$EndPAD
+$PAD
+Sh "11" R 0.5 1 0 0 0
+Dr 0 0.25 0
+At SMD N 00888000
+Ne 0 ""
+Po -6.08 11.45
+$EndPAD
+$PAD
+Sh "12" R 0.5 1 0 0 0
+Dr 0 0.25 0
+At SMD N 00888000
+Ne 0 ""
+Po -6.08 9.45
+$EndPAD
+$PAD
+Sh "13" R 0.5 1 0 0 0
+Dr 0 0.25 0
+At SMD N 00888000
+Ne 0 ""
+Po -6.08 7.45
+$EndPAD
+$PAD
+Sh "14" R 0.5 1 0 0 0
+Dr 0 0.25 0
+At SMD N 00888000
+Ne 0 ""
+Po -6.08 5.45
+$EndPAD
+$EndMODULE ESP-03
+$EndLIBRARY
