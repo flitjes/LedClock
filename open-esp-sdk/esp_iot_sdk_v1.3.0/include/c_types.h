@@ -8,7 +8,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#if 0 
+#if 1 
 typedef unsigned char       uint8_t;
 typedef signed char         sint8_t;
 typedef signed char         int8_t;
