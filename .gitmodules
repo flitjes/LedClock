@@ -8,3 +8,6 @@
 [submodule "esptool"]
 	path = open-esp-sdk/esptool
 	url = https://github.com/pfalcon/esptool
+[submodule "libesphttpd"]
+	path = esphttpd/libesphttpd
+	url = http://git.spritesserver.nl/libesphttpd.git/
