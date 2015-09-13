@@ -114,6 +114,9 @@ __interrupt void USCIAB0TX_ISR(void){
 	USCI0TXI2CInterruptHandler();
 }
 
+static uint8_t moving_average[10];
+static uint8_t moving_average_i = 0;
+
 #pragma vector=PORT1_VECTOR
 __interrupt void PORT1_ISR_HOOK(void)
 {
@@ -136,10 +139,19 @@ __interrupt void PORT1_ISR_HOOK(void)
 			 * Converting the ADC value straight to a percentage 0 - 100
 			 */
 			LDR_value = LDR_value / 10 + 30;
-			if(LDR_value > 100)
-				brightness = 100;
-			else
-				brightness = LDR_value;
+
+			if(moving_average_i >= 10){
+				moving_average_i = 0;
+			}
+
+			if(LDR_value > 100){
+				moving_average[moving_average_i] = 100;
+			} else {
+				moving_average[moving_average_i] = LDR_value;
+			}
+
+			brightness = (moving_average[0] + moving_average[1] + moving_average[2] + moving_average[3] + moving_average[4] + moving_average[5] + moving_average[6] + moving_average[7] + moving_average[8] + moving_average[9]) / 10;
+			moving_average_i++;
 
 		#ifdef DEBUG
 			sprintf(debug_str, "LDR: %d brightness %d\n", LDR_value, brightness);

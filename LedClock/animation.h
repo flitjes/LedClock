@@ -14,7 +14,7 @@ extern LED time_color_hour;
 extern LED time_color_minute;
 extern LED time_color_second;
 extern LED normal_color;
-extern u_char brightness;
+extern uint16_t brightness;
 
 extern void show_clock(struct time_t* time);
 

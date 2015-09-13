@@ -56,7 +56,7 @@ static void setLedColorBrCtrl(uint8_t index, LED* led){
 	compensate_brightness(&set_color);
 	setLEDColor(index, set_color.red, set_color.green, set_color.blue);
 }
-u_char brightness = 10;
+uint16_t brightness = 10;
 void show_clock(struct time_t* time){
 	int8_t i;
 	uint8_t led_count, led_after_glow, led_after_glow_left;
