@@ -45,6 +45,7 @@ int main(void)
 				initStrip(allignment_offset);
 
 				set_time(&rtc);
+		    	P1IE |= BIT3;
 				// set strip color red
 				fillStrip(0xFF, 0x00, 0x00);
 
@@ -54,7 +55,7 @@ int main(void)
 				/* Clear MCx bits to stop timer */
 				TA0CTL &= ~(MC1 + MC0);
 				print_string("LedClock started\n");
-				switch_state(START);
+				switch_state(RUNNING);
 		    	break;
 		    case SET_TIME:
 		    	/* Clear MCx bits to stop timer */
@@ -69,19 +70,13 @@ int main(void)
 				initStrip(allignment_offset);
 
 				f_time_set = 0;
-				switch_state(START);
+				switch_state(RUNNING);
 		    	break;
 		    case RUNNING:
 		    	//__delay_cycles(100000); //6.25 milisecond
 		    	break;
-		    case START:
-		    	/* Start timer in up mode */
-		    	TA0CTL |= MC_1;
-				switch_state(RUNNING);
-		    	break;
 		    case STOP:
-		    	/* Clear MCx bits to stop timer */
-		    	TA0CTL &= ~(MC1 + MC0);
+		    	P1IE &= ~(BIT3);
 		    	fillStrip(0x00, 0x00, 0x00);
 		    	showStrip();
 		    	break;
@@ -126,7 +121,6 @@ __interrupt void PORT1_ISR_HOOK(void)
 		tick();
 
 		if(P1IN & BIT4){
-			switch_state(START);
 			//ADC start conversion - software trigger
 			ADC10CTL0 |= ADC10SC;
 

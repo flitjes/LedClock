@@ -58,7 +58,7 @@ void USCI0RXSerialInterruptHandler(void)
 			switch_state(STOP);
 		} else {
 			if(strcmp(input_buffer, "start") == 0){
-				switch_state(START);
+				switch_state(INIT);
 			}
 		}
 
