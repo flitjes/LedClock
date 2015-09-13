@@ -33,14 +33,13 @@ int main(void)
 
     ds1307_set_squarewave(1);
 
-    ds1307_get_time(&rtc);
-
     switch_state(INIT);
 
     // >>>>> Fill-in user code here <<<<<
     for(;;){
 		switch(current_state){
 		    case INIT:
+		    	ds1307_get_time(&rtc);
 		    	// initialize LED strip
 				initStrip(allignment_offset);
 
@@ -58,8 +57,7 @@ int main(void)
 				switch_state(RUNNING);
 		    	break;
 		    case SET_TIME:
-		    	/* Clear MCx bits to stop timer */
-		    	TA0CTL &= ~(MC1 + MC0);
+		    	P1IE &= ~(BIT3);
 
 				parse_time(time_formated+1, &parsed);
 				set_time(&parsed);
