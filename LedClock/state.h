@@ -15,7 +15,8 @@ typedef enum {
 	SET_TIME,
 	PRINT_TIME,
 	RUNNING,
-	STOP
+	STOP,
+	SHOW_DATA
 }CLOCK_STATE;
 
 extern CLOCK_STATE current_state;

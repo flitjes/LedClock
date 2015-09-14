@@ -48,11 +48,6 @@ int main(void)
 				// set strip color red
 				fillStrip(0xFF, 0x00, 0x00);
 
-				// show the strip
-				showStrip();
-
-				/* Clear MCx bits to stop timer */
-				TA0CTL &= ~(MC1 + MC0);
 				print_string("LedClock started\n");
 				switch_state(RUNNING);
 		    	break;
@@ -75,13 +70,16 @@ int main(void)
 		    	break;
 		    case STOP:
 		    	P1IE &= ~(BIT3);
-		    	fillStrip(0x00, 0x00, 0x00);
-		    	showStrip();
 		    	break;
 		    case PRINT_TIME:
 				print_time();
 				switch_state(previous_state);
 				break;
+		    case SHOW_DATA:
+		    	P1IE &= ~(BIT3);
+		    	showStrip();
+		    	switch_state(STOP);
+		    	break;
 		    default:
 		    	print_string("Non defined case, possible stack corruption\n");
 		    	break;
@@ -113,7 +111,7 @@ static uint8_t moving_average_i = 0;
 #pragma vector=PORT1_VECTOR
 __interrupt void PORT1_ISR_HOOK(void)
 {
-	if(P1IFG & BIT3){
+	if((P1IFG & BIT3)){
 		uint16_t LDR_value = 0;
 		P1IFG &= ~(BIT3);
 		tick();
@@ -132,7 +130,7 @@ __interrupt void PORT1_ISR_HOOK(void)
 			 */
 			LDR_value = LDR_value / 10 + 30;
 
-			if(moving_average_i >= 10){
+			/*if(moving_average_i >= 10){
 				moving_average_i = 0;
 			}
 
@@ -143,7 +141,8 @@ __interrupt void PORT1_ISR_HOOK(void)
 			}
 
 			brightness = (moving_average[0] + moving_average[1] + moving_average[2] + moving_average[3] + moving_average[4] + moving_average[5] + moving_average[6] + moving_average[7] + moving_average[8] + moving_average[9]) / 10;
-			moving_average_i++;
+			moving_average_i++;*/
+			brightness = LDR_value;
 
 		#ifdef DEBUG
 			sprintf(debug_str, "LDR: %d brightness %d\n", LDR_value, brightness);

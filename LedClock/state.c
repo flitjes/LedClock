@@ -15,7 +15,7 @@ const char* CLOCK_STATE_STR[] = {
 		"PRINT_TIME\n",
 		"RUNNING\n",
 		"STOP\n",
-		"START\n"
+		"SHOW_DATA\n"
 };
 
 void switch_state(CLOCK_STATE state){

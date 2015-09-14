@@ -5,7 +5,7 @@
 
 LED leds[NUM_LEDS] = {{0,0,0}};
 
-static uint8_t led_0_offset;
+static uint8_t led_0_offset = 0;
 
 // Initializes everything needed to use this library. This clears the strip.
 void initStrip(uint8_t offset){
