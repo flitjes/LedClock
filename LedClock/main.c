@@ -152,7 +152,7 @@ __interrupt void PORT1_ISR_HOOK(void)
 		#endif
 			show_clock(&current);
 		} else {
-			switch_state(STOP);
+			fillStrip(0x00, 0x00, 0x00);
 		}
 
 	}
