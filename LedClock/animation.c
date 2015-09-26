@@ -101,3 +101,25 @@ void show_clock(struct time_t* time){
 
 	showStrip();
 }
+
+void setcolor(uint8_t id, uint8_t r, uint8_t g, uint8_t b){
+	LED setcolor_to;
+	setcolor_to.red = r;
+	setcolor_to.green = g;
+	setcolor_to.blue = b;
+	switch(id){
+	case HOUR:
+		memcpy(&time_color_hour, &setcolor_to, sizeof(LED));
+		break;
+	case MINUTE:
+		memcpy(&time_color_minute, &setcolor_to, sizeof(LED));
+		break;
+	case SECOND:
+		memcpy(&time_color_second, &setcolor_to, sizeof(LED));
+		break;
+	case BACKGROUND:
+		memcpy(&normal_color, &setcolor_to, sizeof(LED));
+		break;
+	}
+
+}

@@ -16,6 +16,7 @@
 #include "state.h"
 #include "debug.h"
 #include "ws2812.h"
+#include "animation.h"
 
 char input_buffer[SERIAL_BUF_SIZE];
 uint8_t input_count = 0;
@@ -80,6 +81,7 @@ static void handle_input(char input){
 			memcpy(time_formated, p, FORMATED_TIME_SIZE);
 			f_time_set = 1;
 			switch_state(SET_TIME);
+			p=NULL;
 		}
 		if(strcmp(input_buffer, "stop") == 0){
 			switch_state(STOP);
@@ -97,6 +99,22 @@ static void handle_input(char input){
 			switch_state(STOP);
 			data=1;
 			led_data_count = 0;
+		}
+
+		p = strstr(input_buffer, "setcolor=");
+		if(p != NULL){
+			p = strstr(input_buffer, "=");
+			//example 1,0xff0x000xff
+			char id_str[2];
+			id_str[0]=*(p+1);
+			id_str[1]='\0';
+			uint8_t r,g,b,id;
+			r = *(p+2);
+			g = *(p+3);
+			b = *(p+4);
+			id = atoi(id_str);
+			setcolor(id, r, g, b);
+			p=NULL;
 		}
 
 		input_count = 0;

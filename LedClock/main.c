@@ -129,8 +129,10 @@ __interrupt void PORT1_ISR_HOOK(void)
 			 * Converting the ADC value straight to a percentage 0 - 100
 			 */
 			LDR_value = LDR_value / 10 + 30;
-
-			/*if(moving_average_i >= 10){
+			if(LDR_value > 100){
+				LDR_value = 100;
+			}
+			/*if(moving_average_i >= 5){
 				moving_average_i = 0;
 			}
 
@@ -140,7 +142,7 @@ __interrupt void PORT1_ISR_HOOK(void)
 				moving_average[moving_average_i] = LDR_value;
 			}
 
-			brightness = (moving_average[0] + moving_average[1] + moving_average[2] + moving_average[3] + moving_average[4] + moving_average[5] + moving_average[6] + moving_average[7] + moving_average[8] + moving_average[9]) / 10;
+			brightness = (moving_average[0] + moving_average[1] + moving_average[2] + moving_average[3] + moving_average[4]) / 5;
 			moving_average_i++;*/
 			brightness = LDR_value;
 
