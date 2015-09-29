@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = Sat 05 Sep 2015 03:19:18 PM CEST
+Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = Sat 26 Sep 2015 12:08:28 PM CEST
 
 BeginCmp
 TimeStamp = /55E4B1CB;
@@ -19,6 +19,13 @@ TimeStamp = /55E9DB43;
 Reference = ESP1;
 ValeurCmp = ESP-03;
 IdModule  = ESP-03;
+EndCmp
+
+BeginCmp
+TimeStamp = /56006A20;
+Reference = K1;
+ValeurCmp = PROG;
+IdModule  = SIL-3;
 EndCmp
 
 BeginCmp
@@ -46,7 +53,7 @@ BeginCmp
 TimeStamp = /55E4A637;
 Reference = PRTC1;
 ValeurCmp = RTC;
-IdModule  = PIN_ARRAY-6X1;
+IdModule  = SIL-7;
 EndCmp
 
 BeginCmp
@@ -110,6 +117,13 @@ TimeStamp = /55E4A9C6;
 Reference = RLDR1;
 ValeurCmp = LDR;
 IdModule  = R1;
+EndCmp
+
+BeginCmp
+TimeStamp = /56006916;
+Reference = SW1;
+ValeurCmp = MSP_RESET;
+IdModule  = SW_PUSH_SMALL;
 EndCmp
 
 BeginCmp
