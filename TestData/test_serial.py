@@ -21,6 +21,7 @@ def show_animation():
     show_ledstrip(greenred.read())
     time.sleep(0.05)
 
+
 show_animation()
 
 port.write("start\r")
