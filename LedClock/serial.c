@@ -73,8 +73,10 @@ static void handle_input(char input){
 
 	input_buffer[input_count + 1] = '\0';
 	UCA0TXBUF = input;
-	if(input == 0x0D){
-		char* p = strstr(input_buffer, "time=");
+	if(input == '\n'){
+		char* p = strchr(input_buffer, '\r');
+		*p = '\0';
+		p = strstr(input_buffer, "time=");
 		if(p != NULL){
 			p = strstr(input_buffer, "=");
 			//value example 17:15:01
