@@ -16,11 +16,11 @@ char time_formated[FORMATED_TIME_SIZE];
 uint8_t f_time_set = 0;
 
 void tick(){
-	if(current.second + 1 == 60){
+	if(current.second + 1 >= 60){
 		current.second = 0;
-		if(current.minute + 1 == 60){
+		if(current.minute + 1 >= 60){
 			current.minute = 0;
-			if(current.hour + 1 == 12){
+			if(current.hour + 1 >= 12){
 				current.hour = 0;
 			} else	{
 				current.hour++;
