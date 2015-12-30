@@ -9,14 +9,8 @@
 #include "time.h"
 #include <msp430.h>
 
-#define LED_COUNT 60
-
-/*LED time_color_hour = { 0x00, 0x00, 0xFF };
-LED time_color_minute = { 0x00, 0x00, 0xFF };
-LED time_color_second = { 0x00, 0xFF, 0x00 };
-LED normal_color = { 0xFF, 0x00, 0x00 };*/
 LED time_color_hour = { 0x00, 0x00, 0xFF };
-LED time_color_minute = { 0x00, 0x00, 0xFF };
+LED time_color_minute = { 0xFF, 0x00, 0x00 };
 LED time_color_second = { 0x00, 0x00, 0x00 };
 LED normal_color = { 0xCA, 0xBD, 0x80 };
 
@@ -57,48 +51,31 @@ static void setLedColorBrCtrl(uint8_t index, LED* led){
 	setLEDColor(index, set_color.red, set_color.green, set_color.blue);
 }
 uint16_t brightness = 10;
+
+void setColorLength(uint8_t start, uint8_t end, LED *color){
+	uint8_t length = end - start;
+	uint8_t i;
+	for(i = start; i < (start + length); i++){
+		setLedColorBrCtrl(i, color);
+	}
+}
+
 void show_clock(struct time_t* time){
-	int8_t i;
-	uint8_t led_count, led_after_glow, led_after_glow_left;
-	LED set_color;
-	for (i = 0; i < LED_COUNT; i++){			// n is number of LEDs
-		setLedColorBrCtrl(i, &normal_color);
+	uint8_t leds_per_minute = NUM_LEDS / 60;
+	uint8_t led_hour = (time->hour * leds_per_minute) * 5 + (time->minute * leds_per_minute) % 5;
+	uint8_t led_minute = time->minute * leds_per_minute;
+
+	if(led_hour > led_minute){
+		setColorLength(led_minute, led_hour, &time_color_minute);
+		setColorLength(led_hour, 59, &time_color_hour);
+		setColorLength(0, led_minute, &time_color_hour);
 	}
 
-	led_count  = time->hour * 5;
-	set_color.red = time_color_hour.red >> 1;
-	set_color.green = time_color_hour.green >> 1;
-	set_color.blue = time_color_hour.blue >> 1;
-
-	if(led_count == NUM_LEDS){
-		setLedColorBrCtrl(led_count - 2, &set_color);
-		setLedColorBrCtrl(led_count - 1, &time_color_hour);
-		setLedColorBrCtrl(0, &set_color);
-	} else if(led_count != NUM_LEDS) {
-		setLedColorBrCtrl(led_count - 1, &set_color);
-		setLedColorBrCtrl(led_count, &time_color_hour);
-		setLedColorBrCtrl(led_count + 1, &set_color);
+	if(led_hour < led_minute){
+		setColorLength(led_hour, led_minute, &time_color_minute);
+		setColorLength(led_minute, 59, &time_color_hour);
+		setColorLength(0, led_hour, &time_color_hour);
 	}
-
-	setLedColorBrCtrl(time->minute, &time_color_minute);
-
-	led_after_glow = 2;
-	led_after_glow_left = led_after_glow;
-
-	for(i = time->second; i >= 0 && i > time->second - led_after_glow; i--){
-		set_color.red = time_color_second.red >> (led_after_glow - led_after_glow_left) * 2;
-		set_color.blue = time_color_second.blue >> (led_after_glow - led_after_glow_left) * 2;
-		set_color.green = time_color_second.green >> (led_after_glow - led_after_glow_left) * 2;
-		setLedColorBrCtrl(i, &time_color_second);
-		led_after_glow_left--;
-	}
-	/*Compensate for the fact it's a linear strip and a clock is round*/
-	if(led_after_glow_left > 0){
-		for(i = NUM_LEDS - 1; i > (NUM_LEDS - 1) - led_after_glow_left; i--){
-			setLedColorBrCtrl(i, &time_color_second);
-		}
-	}
-
 	showStrip();
 }
 
