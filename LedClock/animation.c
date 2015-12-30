@@ -9,8 +9,10 @@
 #include "time.h"
 #include <msp430.h>
 
+#define LED_COUNT 60
+
 LED time_color_hour = { 0x00, 0x00, 0xFF };
-LED time_color_minute = { 0xFF, 0x00, 0x00 };
+LED time_color_minute = { 0x00, 0xFF, 0x00 };
 LED time_color_second = { 0x00, 0x00, 0x00 };
 LED normal_color = { 0xCA, 0xBD, 0x80 };
 
@@ -51,7 +53,6 @@ static void setLedColorBrCtrl(uint8_t index, LED* led){
 	setLEDColor(index, set_color.red, set_color.green, set_color.blue);
 }
 uint16_t brightness = 10;
-
 void setColorLength(uint8_t start, uint8_t end, LED *color){
 	uint8_t length = end - start;
 	uint8_t i;
@@ -59,24 +60,27 @@ void setColorLength(uint8_t start, uint8_t end, LED *color){
 		setLedColorBrCtrl(i, color);
 	}
 }
-
+uint8_t ongoing = 0;
 void show_clock(struct time_t* time){
-	uint8_t leds_per_minute = NUM_LEDS / 60;
-	uint8_t led_hour = (time->hour * leds_per_minute) * 5 + (time->minute * leds_per_minute) % 5;
-	uint8_t led_minute = time->minute * leds_per_minute;
+	if(!ongoing){
+		uint8_t led_hour;
+		uint8_t led_minute;
+		ongoing = 1;
+		led_hour = (time->hour * 5) + (time->minute / 12);
+		led_minute = time->minute;
 
-	if(led_hour > led_minute){
-		setColorLength(led_minute, led_hour, &time_color_minute);
-		setColorLength(led_hour, 59, &time_color_hour);
-		setColorLength(0, led_minute, &time_color_hour);
+		if(led_hour > led_minute){
+			setColorLength(led_minute, led_hour, &time_color_minute);
+			setColorLength(led_hour, 60, &time_color_hour);
+			setColorLength(0, led_minute, &time_color_hour);
+		} else if (led_hour < led_minute){
+			setColorLength(led_hour, led_minute, &time_color_minute);
+			setColorLength(led_minute, 60, &time_color_hour);
+			setColorLength(0, led_hour, &time_color_hour);
+		}
+		showStrip();
+		ongoing = 0;
 	}
-
-	if(led_hour < led_minute){
-		setColorLength(led_hour, led_minute, &time_color_minute);
-		setColorLength(led_minute, 59, &time_color_hour);
-		setColorLength(0, led_hour, &time_color_hour);
-	}
-	showStrip();
 }
 
 void setcolor(uint8_t id, uint8_t r, uint8_t g, uint8_t b){
