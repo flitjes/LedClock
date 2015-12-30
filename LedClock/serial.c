@@ -72,7 +72,7 @@ static void handle_input(char input){
 		input_count = 0;
 
 	input_buffer[input_count + 1] = '\0';
-	UCA0TXBUF = input;
+	//UCA0TXBUF = input;
 	if(input == '\n'){
 		char* p = strchr(input_buffer, '\r');
 		*p = '\0';
