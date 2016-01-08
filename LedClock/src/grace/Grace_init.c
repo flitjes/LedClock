@@ -56,6 +56,9 @@ void Grace_init(void)
     /* initialize Config for the MSP430 System Registers */
     System_graceInit();
 
+    /* initialize Config for the MSP430 A3 Timer0 */
+    Timer0_A3_graceInit();
+
     /* initialize Config for the MSP430 WDT+ */
     WDTplus_graceInit();
 }
