@@ -52,10 +52,29 @@ static void setLedColorBrCtrl(uint8_t index, LED* led){
 	compensate_brightness(&set_color);
 	setLEDColor(index, set_color.red, set_color.green, set_color.blue);
 }
+
+uint32_t colorToBit(LED *color){
+	uint32_t retval = 0;
+	retval = color->red;
+	retval = retval << 8;
+	retval |= color->green;
+	retval = retval << 8;
+	retval |= color->blue;
+	return retval;
+}
+
+void bitToColor(uint32_t value, LED *color){
+	color->blue = value & 0xFF;
+	color->green = (value >> 8) & 0xFF;
+	color->red = (value >> 16) & 0xFF;
+}
 uint16_t brightness = 10;
 void setColorLength(uint8_t start, uint8_t end, LED *color){
 	uint8_t length = 0, count = 0, index = 0;
-
+	LED c;
+	uint32_t value;
+	value = colorToBit(color);
+	bitToColor(value, &c);
 	//8:15 -> start 41 end 15
 	if (start < 60 && end < start)
 		length = (60 - start) + end;
@@ -64,7 +83,7 @@ void setColorLength(uint8_t start, uint8_t end, LED *color){
 
 	index = start;
 	while(count < length){
-		setLedColorBrCtrl(index, color);
+		setLedColorBrCtrl(index, &c);
 		count++;
 		index++;
 		if(index == 60){
