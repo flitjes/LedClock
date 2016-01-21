@@ -54,10 +54,22 @@ static void setLedColorBrCtrl(uint8_t index, LED* led){
 }
 uint16_t brightness = 10;
 void setColorLength(uint8_t start, uint8_t end, LED *color){
-	uint8_t length = end - start;
-	uint8_t i;
-	for(i = start; i < (start + length); i++){
-		setLedColorBrCtrl(i, color);
+	uint8_t length = 0, count = 0, index = 0;
+
+	//8:15 -> start 41 end 15
+	if (start < 60 && end < start)
+		length = (60 - start) + end;
+	else
+		length = end - start;
+
+	index = start;
+	while(count < length){
+		setLedColorBrCtrl(index, color);
+		count++;
+		index++;
+		if(index == 60){
+			index = 0;
+		}
 	}
 }
 uint8_t ongoing = 0;
@@ -71,12 +83,10 @@ void show_clock(struct time_t* time){
 
 		if(led_hour > led_minute){
 			setColorLength(led_minute, led_hour, &time_color_minute);
-			setColorLength(led_hour, 60, &time_color_hour);
-			setColorLength(0, led_minute, &time_color_hour);
+			setColorLength(led_hour, led_minute, &time_color_hour);
 		} else if (led_hour < led_minute){
 			setColorLength(led_hour, led_minute, &time_color_minute);
-			setColorLength(led_minute, 60, &time_color_hour);
-			setColorLength(0, led_hour, &time_color_hour);
+			setColorLength(led_minute, led_hour, &time_color_hour);
 		}
 		showStrip();
 		ongoing = 0;
