@@ -41,7 +41,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "26 sep 2015"
+Date "10 jan 2016"
 Rev ""
 Comp ""
 Comment1 ""
@@ -703,14 +703,6 @@ Wire Wire Line
 Wire Wire Line
 	7250 4600 7250 4650
 Wire Wire Line
-	8300 4800 8300 4750
-Wire Wire Line
-	8300 4750 8050 4750
-Wire Wire Line
-	8300 4900 8300 4850
-Wire Wire Line
-	8300 4850 8050 4850
-Wire Wire Line
 	9750 3500 10250 3500
 Wire Wire Line
 	8350 4700 8350 4200
@@ -768,7 +760,7 @@ Wire Wire Line
 Wire Wire Line
 	10700 5750 10400 5750
 Wire Wire Line
-	8300 4800 10700 4800
+	8050 4800 10700 4800
 Wire Wire Line
 	8300 4900 8600 4900
 Wire Wire Line
@@ -886,4 +878,10 @@ F 3 "" H 9900 5150 60  0000 C CNN
 	1    9900 5150
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	8050 4800 8050 4850
+Wire Wire Line
+	8300 4900 8300 4750
+Wire Wire Line
+	8300 4750 8050 4750
 $EndSCHEMATC
