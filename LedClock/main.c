@@ -67,6 +67,18 @@ int main(void)
 		    	break;
 		    case RUNNING:
 		    	//__delay_cycles(100000); //6.25 milisecond
+		    	if (current.second % 10 == 0){
+					#ifdef DEBUG
+						sprintf(debug_str, "Time: %d:%d:%d\n", current.hour, current.minute, current.second);
+						print_string(debug_str);
+					#endif
+
+					if(P1IN & BIT4){
+						show_clock(&current);
+					} else {
+						fillStrip(0x00, 0x00, 0x00);
+					}
+		    	}
 		    	break;
 		    case STOP:
 		    	P1IE &= ~(BIT3);
@@ -105,7 +117,7 @@ __interrupt void USCIAB0TX_ISR(void){
 	USCI0TXI2CInterruptHandler();
 }
 
-static uint8_t moving_average[10];
+static uint8_t moving_average[5];
 static uint8_t moving_average_i = 0;
 
 #pragma vector=PORT1_VECTOR
@@ -116,16 +128,7 @@ __interrupt void PORT1_ISR_HOOK(void)
 		/*Halt brightness timer*/
 		TA0CTL &= ~(BIT4 | BIT5);
 		tick();
-		#ifdef DEBUG
-			sprintf(debug_str, "Time: %d:%d:%d\n", current.hour, current.minute, current.second);
-			print_string(debug_str);
-		#endif
 
-		if(P1IN & BIT4){
-			show_clock(&current);
-		} else {
-			fillStrip(0x00, 0x00, 0x00);
-		}
 		/*Start brightness timer*/
 		TA0CTL |= MC_1;
 
