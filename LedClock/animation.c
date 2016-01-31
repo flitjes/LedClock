@@ -11,10 +11,11 @@
 
 #define LED_COUNT 60
 
+LED time_color_hour_gr = { 0xFF, 0x00, 0x00 };
 LED time_color_hour = { 0x00, 0x00, 0xFF };
 LED time_color_minute = { 0x00, 0xFF, 0x00 };
-LED time_color_second = { 0x00, 0x00, 0x00 };
-LED normal_color = { 0xCA, 0xBD, 0x80 };
+LED time_color_minute_gr = { 0xFF, 0xFF, 0x00 };
+
 
 const uint8_t gamma[] = {
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -53,10 +54,16 @@ static void setLedColorBrCtrl(uint8_t index, LED* led){
 	setLEDColor(index, set_color.red, set_color.green, set_color.blue);
 }
 
-uint16_t brightness = 10;
-void setColorLength(uint8_t start, uint8_t end, LED *color){
-	uint8_t length = 0, count = 0, index = 0;
+static uint8_t gradientInc(uint8_t start, uint8_t end, uint8_t length, uint8_t index){
+	uint8_t p_index = 1 * 100 / length * 100;
+	uint16_t p = index * p_index / 100;
 
+	return (start * p + end * (100 - p)) / 100;
+}
+uint16_t brightness = 10;
+void setColorLength(uint8_t start, uint8_t end, LED *color, LED *color_gr, uint8_t gr){
+	uint8_t length = 0, count = 0, index = 0;
+	LED c;
 	//8:15 -> start 41 end 15
 	if (start < 60 && end < start)
 		length = (60 - start) + end;
@@ -64,8 +71,17 @@ void setColorLength(uint8_t start, uint8_t end, LED *color){
 		length = end - start;
 
 	index = start;
+
 	while(count < length){
-		setLedColorBrCtrl(index, color);
+		if(gr){
+			c.red = gradientInc(color->red, color_gr->red,length, count);
+			c.green = gradientInc(color->green, color_gr->green,length, count);
+			c.blue = gradientInc(color->blue, color_gr->blue,length, count);
+			setLedColorBrCtrl(index, &c);
+		} else {
+			setLedColorBrCtrl(index, color);
+		}
+
 		count++;
 		index++;
 		if(index == 60){
@@ -83,11 +99,11 @@ void show_clock(struct time_t* time){
 		led_minute = time->minute;
 
 		if(led_hour > led_minute){
-			setColorLength(led_minute, led_hour, &time_color_minute);
-			setColorLength(led_hour, led_minute, &time_color_hour);
+			setColorLength(led_minute, led_hour, &time_color_minute, &time_color_minute_gr, 1);
+			setColorLength(led_hour, led_minute, &time_color_hour, &time_color_hour_gr, 1);
 		} else if (led_hour < led_minute){
-			setColorLength(led_hour, led_minute, &time_color_minute);
-			setColorLength(led_minute, led_hour, &time_color_hour);
+			setColorLength(led_hour, led_minute, &time_color_minute, &time_color_minute_gr, 1);
+			setColorLength(led_minute, led_hour, &time_color_hour, &time_color_hour_gr, 1);
 		}
 		showStrip();
 		ongoing = 0;
@@ -105,12 +121,6 @@ void setcolor(uint8_t id, uint8_t r, uint8_t g, uint8_t b){
 		break;
 	case MINUTE:
 		memcpy(&time_color_minute, &setcolor_to, sizeof(LED));
-		break;
-	case SECOND:
-		memcpy(&time_color_second, &setcolor_to, sizeof(LED));
-		break;
-	case BACKGROUND:
-		memcpy(&normal_color, &setcolor_to, sizeof(LED));
 		break;
 	}
 

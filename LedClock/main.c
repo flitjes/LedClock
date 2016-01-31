@@ -30,7 +30,7 @@ int main(void)
     Grace_init();                   // Activate Grace-generated configuration
     struct time_t parsed;
     struct time_t rtc = { 0, 0, 0 };
-
+    uint8_t previous_second = 0;
     ds1307_set_squarewave(1);
 
     switch_state(INIT);
@@ -67,7 +67,8 @@ int main(void)
 		    	break;
 		    case RUNNING:
 		    	//__delay_cycles(100000); //6.25 milisecond
-		    	if (current.second % 10 == 0){
+		    	if (current.second != previous_second){
+		    		previous_second = current.second;
 					#ifdef DEBUG
 						sprintf(debug_str, "Time: %d:%d:%d\n", current.hour, current.minute, current.second);
 						print_string(debug_str);
@@ -117,7 +118,7 @@ __interrupt void USCIAB0TX_ISR(void){
 	USCI0TXI2CInterruptHandler();
 }
 
-static uint8_t moving_average[5];
+static uint8_t moving_average[5] = {50, 50, 50, 50, 50};
 static uint8_t moving_average_i = 0;
 
 #pragma vector=PORT1_VECTOR
