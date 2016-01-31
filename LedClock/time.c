@@ -36,13 +36,19 @@ void tick(){
 void parse_time(char* time, struct time_t* parsed){
 	char * pch;
 	char* delim = ":";
+	uint8_t hour;
 
 	print_string("time to parse:");
 	print_string(time);
 	print_string("\n");
 
 	pch = strtok (time,delim);
-	parsed->hour = atoi(pch);
+	hour = atoi(pch);
+	if(hour > 12)
+		parsed->hour = hour - 12;
+	else
+		parsed->hour = hour;
+
 	pch = strtok (NULL, delim);
 	parsed->minute = atoi(pch);
 	pch = strtok (NULL, delim);
