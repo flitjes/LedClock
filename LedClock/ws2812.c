@@ -26,6 +26,8 @@ void initStrip(uint8_t offset){
 
 // Sets the color of a certain LED (0 indexed)
 void setLEDColor(u_int p, u_char r, u_char g, u_char b){
+	if (p >= NUM_LEDS)
+		return;
 	leds[p].red = r;
 	leds[p].green = g;
 	leds[p].blue = b;

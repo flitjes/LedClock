@@ -11,7 +11,7 @@
 #include <msp430.h>
 #include <ti/mcu/msp430/Grace.h>
 
-struct time_t current;
+struct time_t current = { 0, 0, 0 };
 char time_formated[FORMATED_TIME_SIZE];
 uint8_t f_time_set = 0;
 

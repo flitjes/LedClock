@@ -8,13 +8,14 @@
 #include "ws2812.h"
 #include "time.h"
 #include <msp430.h>
+#include "serial.h"
+#include "debug.h"
 
 #define LED_COUNT 60
 
-LED time_color_hour_gr = { 0xFF, 0x00, 0x00 };
 LED time_color_hour = { 0x00, 0x00, 0xFF };
 LED time_color_minute = { 0x00, 0xFF, 0x00 };
-LED time_color_minute_gr = { 0xFF, 0xFF, 0x00 };
+LED time_color_off = { 0x00, 0x00, 0x00 };
 
 
 const uint8_t gamma[] = {
@@ -89,22 +90,64 @@ void setColorLength(uint8_t start, uint8_t end, LED *color, LED *color_gr, uint8
 		}
 	}
 }
+#define minute_off 2
+#define hour_off 3
+#define max_led_cout 59
 uint8_t ongoing = 0;
 void show_clock(struct time_t* time){
-	if(!ongoing){
-		uint8_t led_hour;
-		uint8_t led_minute;
-		ongoing = 1;
-		led_hour = (time->hour * 5) + (time->minute / 12);
-		led_minute = time->minute;
+    if(!ongoing){
+        uint8_t led_hour, led_minute, minute_fill_start, minute_fill_stop, hour_fill_start, hour_fill_stop;
+        ongoing = 1;
 
-		if(led_hour > led_minute){
-			setColorLength(led_minute, led_hour, &time_color_minute, &time_color_minute_gr, 1);
-			setColorLength(led_hour, led_minute, &time_color_hour, &time_color_hour_gr, 1);
-		} else if (led_hour < led_minute){
-			setColorLength(led_hour, led_minute, &time_color_minute, &time_color_minute_gr, 1);
-			setColorLength(led_minute, led_hour, &time_color_hour, &time_color_hour_gr, 1);
-		}
+        led_hour = (time->hour * 5) + (time->minute / 12)  + max_led_cout;
+        led_minute = time->minute + max_led_cout;
+
+        minute_fill_start = led_minute + minute_off;
+        minute_fill_stop = led_minute - minute_off;
+        hour_fill_start = led_hour + hour_off;
+        hour_fill_stop = led_hour - hour_off;
+
+
+        minute_fill_start -= max_led_cout;
+        minute_fill_stop -= max_led_cout;
+
+        hour_fill_start -= max_led_cout;
+        hour_fill_stop -= max_led_cout;
+
+
+        if(minute_fill_start >= NUM_LEDS)
+        	minute_fill_start -= 60;
+
+        if(minute_fill_stop >= NUM_LEDS)
+        	minute_fill_stop -= 60;
+
+        if(hour_fill_start >= NUM_LEDS)
+        	hour_fill_start -= 60;
+
+        if(hour_fill_stop >= NUM_LEDS)
+        	hour_fill_stop -= 60;
+
+        sprintf(debug_str, "ms %d me %d hs %d he %d\n", minute_fill_start, minute_fill_stop, hour_fill_start, hour_fill_stop);
+        print_string(debug_str);
+        if(led_hour > led_minute){
+            setColorLength(minute_fill_start, hour_fill_stop, &time_color_minute, &time_color_minute, 0);
+            setColorLength(minute_fill_stop, minute_fill_start, &time_color_off, &time_color_off, 0);
+            setColorLength(hour_fill_start, minute_fill_stop, &time_color_hour, &time_color_hour, 0);
+            setColorLength(hour_fill_stop, hour_fill_start, &time_color_off, &time_color_off, 0);
+
+        } else if (led_hour < led_minute){
+
+            setColorLength(hour_fill_start, minute_fill_stop, &time_color_minute, &time_color_minute, 0);
+            setColorLength(minute_fill_stop, minute_fill_start, &time_color_off, &time_color_off, 0);
+            setColorLength(minute_fill_start, hour_fill_stop, &time_color_hour, &time_color_hour, 0);
+            setColorLength(hour_fill_stop, hour_fill_start, &time_color_off, &time_color_off, 0);
+
+        }
+
+       	if(led_minute <= (led_hour + minute_off * 2 + hour_off) && led_minute >= (led_hour - minute_off * 2- hour_off)){
+        	setLedColorBrCtrl(led_minute - max_led_cout, &time_color_minute);
+        	setLedColorBrCtrl(led_hour - max_led_cout, &time_color_hour);
+        }
 		showStrip();
 		ongoing = 0;
 	}

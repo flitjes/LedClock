@@ -16,7 +16,6 @@
 #include <stdint.h>
 #include "debug.h"
 #include "DS1307.h"
-#include "TI_USCI_I2C_master.h"
 
 uint8_t allignment_offset = 30;
 /*
@@ -30,7 +29,7 @@ int main(void)
     Grace_init();                   // Activate Grace-generated configuration
     struct time_t parsed;
     struct time_t rtc = { 0, 0, 0 };
-    uint8_t previous_second = 0;
+    uint8_t previous_second = 120;
     ds1307_set_squarewave(1);
 
     switch_state(INIT);
@@ -99,75 +98,4 @@ int main(void)
 		}
     }
 
-}
-
-#pragma vector=USCIAB0RX_VECTOR
-__interrupt void USCI0RX_ISR_HOOK(void){
-	if(IFG2 & UCA0RXIFG){
-		USCI0RXSerialInterruptHandler();
-	}
-
-	if(IFG2 & UCB0RXIFG){
-		USCI0RXI2CInterruptHandler();
-	}
-}
-
-
-#pragma vector = USCIAB0TX_VECTOR
-__interrupt void USCIAB0TX_ISR(void){
-	USCI0TXI2CInterruptHandler();
-}
-
-static uint8_t moving_average[5] = {50, 50, 50, 50, 50};
-static uint8_t moving_average_i = 0;
-
-#pragma vector=PORT1_VECTOR
-__interrupt void PORT1_ISR_HOOK(void)
-{
-	if((P1IFG & BIT3)){
-		P1IFG &= ~(BIT3);
-		/*Halt brightness timer*/
-		TA0CTL &= ~(BIT4 | BIT5);
-		tick();
-
-		/*Start brightness timer*/
-		TA0CTL |= MC_1;
-
-	}
-}
-/*
- *  ======== Timer0_A3 Interrupt Service Routine ========
- */
-#pragma vector=TIMER0_A0_VECTOR
-__interrupt void TIMER0_A0_ISR_HOOK(void)
-{
-	uint16_t LDR_value = 0;
-	//ADC start conversion - software trigger
-	ADC10CTL0 |= ADC10SC;
-
-	// Loop until ADC10IFG is set indicating ADC conversion complete
-	while ((ADC10CTL0 & ADC10IFG) == 0);
-
-	LDR_value = ADC10MEM;
-	/* 1024 == complete darkness
-	 * 0 == light overload
-	 * Converting the ADC value straight to a percentage 0 - 100
-	 */
-	LDR_value = LDR_value / 10 + 30;
-	if(LDR_value > 100){
-		LDR_value = 100;
-	}
-	if(moving_average_i >= 5){
-		moving_average_i = 0;
-	}
-
-	if(LDR_value > 100){
-		moving_average[moving_average_i] = 100;
-	} else {
-		moving_average[moving_average_i] = LDR_value;
-	}
-
-	brightness = (moving_average[0] + moving_average[1] + moving_average[2] + moving_average[3] + moving_average[4]) / 5;
-	moving_average_i++;
-	//brightness = LDR_value;
 }

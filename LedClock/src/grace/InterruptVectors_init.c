@@ -22,6 +22,12 @@
 
 /* USER CODE START (section: InterruptVectors_init_c_prologue) */
 /* User defined includes, defines, global variables and functions */
+#include "../../TI_USCI_I2C_master.h"
+#include "../../serial.h"
+#include "../../animation.h"
+#include <stdint.h>
+static uint8_t moving_average[5] = {50, 50, 50, 50, 50};
+static uint8_t moving_average_i = 0;
 /* USER CODE END (section: InterruptVectors_init_c_prologue) */
 
 /*
@@ -30,3 +36,170 @@
 void InterruptVectors_graceInit(void)
 {
 }
+
+
+/* Interrupt Function Prototypes */
+
+
+
+/*
+ *  ======== PORT1 Interrupt Service Routine ========
+ *
+ * Here are several important notes on using PORTx interrupt Handler:
+ *
+ * 1. User must explicitly clear the port interrupt flag before exiting
+ *
+ *    PxIFG &= ~(BITy);
+ *
+ * 2. User could also exit from low power mode and continue with main
+ *    program execution by using the following instruction before exiting
+ *    this interrupt handler.
+ *
+ *    __bic_SR_register_on_exit(LPMx_bits);
+ *
+ */
+#pragma vector=PORT1_VECTOR
+__interrupt void PORT1_ISR_HOOK(void)
+{
+    /* USER CODE START (section: PORT1_ISR_HOOK) */
+	if((P1IFG & BIT3)){
+		P1IFG &= ~(BIT3);
+		/*Halt brightness timer*/
+		TA0CTL &= ~(BIT4 | BIT5);
+		tick();
+
+		/*Start brightness timer*/
+		TA0CTL |= MC_1;
+
+	}
+    /* USER CODE END (section: PORT1_ISR_HOOK) */
+}
+
+/*
+ *  ======== USCI A0/B0 TX Interrupt Handler Generation ========
+ *
+ * Here are several important notes on using USCI_A0/B0 TX interrupt Handler:
+ * 1. User could use the following code as a template to service the interrupt
+ *    handler. Just simply copy and paste it into your user definable code
+ *    section.
+ *  For UART and SPI configuration:
+
+    if (IFG2 & UCA0TXIFG) {
+
+    }
+    else if (IFG2 & UCB0TXIFG) {
+
+    }
+
+ *  For I2C configuration:
+    if (IFG2 & UCA0/B0TXIFG) {
+
+    }
+    else if (IFG2 & UCA0/B0RXIFG) {
+
+    }
+
+
+ * 2. User could also exit from low power mode and continue with main
+ *    program execution by using the following instruction before exiting
+ *    this interrupt handler.
+ *
+ *    __bic_SR_register_on_exit(LPMx_bits);
+ */
+#pragma vector=USCIAB0TX_VECTOR
+__interrupt void USCI0TX_ISR_HOOK(void)
+{
+    /* USER CODE START (section: USCI0TX_ISR_HOOK) */
+	USCI0TXI2CInterruptHandler();
+    /* USER CODE END (section: USCI0TX_ISR_HOOK) */
+}
+
+/*
+ *  ======== USCI A0/B0 RX Interrupt Handler Generation ========
+ *
+ * Here are several important notes on using USCI_A0/B0 RX interrupt Handler:
+ * 1. User could use the following code as a template to service the interrupt
+ *    handler. Just simply copy and paste it into your user definable code
+ *    section.
+ *  For UART and SPI configuration:
+
+    if (IFG2 & UCA0RXIFG) {
+
+    }
+    else if (IFG2 & UCB0RXIFG) {
+
+    }
+
+*  For I2C configuration:
+    if (UCB0STAT & UCSTTIFG) {
+
+    }
+    else if (UCB0STAT & UCSTPIFG) {
+
+    }
+    else if (UCB0STAT & UCNACKIFG) {
+
+    }
+    else if (UCB0STAT & UCALIFG) {
+
+    }
+
+ * 2. User could also exit from low power mode and continue with main
+ *    program execution by using the following instruction before exiting
+ *    this interrupt handler.
+ *
+ *    __bic_SR_register_on_exit(LPMx_bits);
+ */
+#pragma vector=USCIAB0RX_VECTOR
+__interrupt void USCI0RX_ISR_HOOK(void)
+{
+    /* USER CODE START (section: USCI0RX_ISR_HOOK) */
+	if(IFG2 & UCA0RXIFG){
+		USCI0RXSerialInterruptHandler();
+	}
+
+	if(IFG2 & UCB0RXIFG){
+		USCI0RXI2CInterruptHandler();
+	}
+    /* USER CODE END (section: USCI0RX_ISR_HOOK) */
+}
+
+/*
+ *  ======== Timer0_A3 Interrupt Service Routine ======== 
+ */
+#pragma vector=TIMER0_A0_VECTOR
+__interrupt void TIMER0_A0_ISR_HOOK(void)
+{
+    /* USER CODE START (section: TIMER0_A0_ISR_HOOK) */
+	uint16_t LDR_value = 0;
+	//ADC start conversion - software trigger
+	ADC10CTL0 |= ADC10SC;
+
+	// Loop until ADC10IFG is set indicating ADC conversion complete
+	while ((ADC10CTL0 & ADC10IFG) == 0);
+
+	LDR_value = ADC10MEM;
+	/* 1024 == complete darkness
+	 * 0 == light overload
+	 * Converting the ADC value straight to a percentage 0 - 100
+	 */
+	LDR_value = LDR_value / 10 + 30;
+	if(LDR_value > 100){
+		LDR_value = 100;
+	}
+	if(moving_average_i >= 5){
+		moving_average_i = 0;
+	}
+
+	if(LDR_value > 100){
+		moving_average[moving_average_i] = 100;
+	} else {
+		moving_average[moving_average_i] = LDR_value;
+	}
+
+	brightness = (moving_average[0] + moving_average[1] + moving_average[2] + moving_average[3] + moving_average[4]) / 5;
+	moving_average_i++;
+	//brightness = LDR_value;
+    /* USER CODE END (section: TIMER0_A0_ISR_HOOK) */
+}
+
