@@ -41,7 +41,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "10 jan 2016"
+Date "20 feb 2016"
 Rev ""
 Comp ""
 Comment1 ""
@@ -724,7 +724,6 @@ Wire Wire Line
 Wire Wire Line
 	9150 3300 9150 3500
 Connection ~ 8350 4450
-Connection ~ 8800 4200
 Wire Wire Line
 	5000 950  5000 900 
 Connection ~ 5000 900 
@@ -764,8 +763,6 @@ Wire Wire Line
 Wire Wire Line
 	8300 4900 8600 4900
 Wire Wire Line
-	8800 5850 9400 5850
-Wire Wire Line
 	8350 4700 10600 4700
 Wire Wire Line
 	9400 5350 9300 5350
@@ -779,8 +776,6 @@ Wire Wire Line
 	10600 4700 10600 5450
 Wire Wire Line
 	10600 5450 10400 5450
-Wire Wire Line
-	8800 4200 8800 5850
 Wire Wire Line
 	9150 5950 9400 5950
 Wire Wire Line
