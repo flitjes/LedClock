@@ -1,15 +1,15 @@
 # optional compiler flags
-CCOPTS ?= -vmsp --abi=eabi --use_hw_mpy=none --include_path="/opt/ti/ccsv6/ccs_base/msp430/include" --include_path="/opt/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.4/include" --advice:power=all -g --define=__MSP430G2553__ --diag_warning=225 --display_error_number --diag_wrap=off --printf_support=minimal   -qq -pdsw225 
+CCOPTS ?= -vmsp --abi=eabi --use_hw_mpy=none --include_path="/home/flitjesdev/ti/ccsv6/ccs_base/msp430/include" --include_path="/home/flitjesdev/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include" --advice:power=all -g --define=__MSP430G2553__ --diag_warning=225 --display_error_number --diag_wrap=off --printf_support=minimal   -qq -pdsw225 
 
 # required C preprocessor flags
-#    compiler   headers: "/opt/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.4/include"
-#    device     headers: "/opt/ti/ccsv6/ccs_base/msp430/include"
-#    Grace      headers: "/opt/ti/grace_3_10_00_82/packages"
-CPPFLAGS = -D__MSP430G2553__ -I "/opt/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.4/include" -I "/opt/ti/grace_3_10_00_82/packages"  -I "/opt/ti/ccsv6/ccs_base/msp430/include" 
+#    compiler   headers: "/home/flitjesdev/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include"
+#    device     headers: "/home/flitjesdev/ti/ccsv6/ccs_base/msp430/include"
+#    Grace      headers: "/home/flitjesdev/ti/grace_3_10_00_82/packages"
+CPPFLAGS = -D__MSP430G2553__ -I "/home/flitjesdev/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include" -I "/home/flitjesdev/ti/grace_3_10_00_82/packages"  -I "/home/flitjesdev/ti/ccsv6/ccs_base/msp430/include" 
 
 # the compiler and archiver commands
-CC = "/opt/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.4/bin/cl430" --abi=eabi -c --obj_directory=objs/  -vmsp
-AR = "/opt/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.4/bin/ar430" rq
+CC = "/home/flitjesdev/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/bin/cl430" --abi=eabi -c --obj_directory=objs/  -vmsp
+AR = "/home/flitjesdev/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/bin/ar430" rq
 RM = rm -f
 MKDIR = mkdir -p
 

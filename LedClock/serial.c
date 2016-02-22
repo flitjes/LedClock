@@ -67,6 +67,7 @@ void USCI0RXSerialInterruptHandler(void)
 
 }
 
+char conv [4] = { 0, 0, '\n', '\0' };
 static void handle_input(char input){
 	if(input_count >= SERIAL_BUF_SIZE)
 		input_count = 0;
@@ -108,14 +109,28 @@ static void handle_input(char input){
 			p = strstr(input_buffer, "=");
 			//example 1,0xff0x000xff
 			char id_str[2];
+			int r,g,b,id;
 			id_str[0]=*(p+1);
 			id_str[1]='\0';
-			uint8_t r,g,b,id;
-			r = *(p+2);
-			g = *(p+3);
-			b = *(p+4);
+
 			id = atoi(id_str);
-			setcolor(id, r, g, b);
+
+			conv[0] = *(p+2);
+			conv[1] = *(p+3);
+			r = strtol(conv, NULL, 16);
+			print_string(conv);
+
+			conv[0] = *(p+4);
+			conv[1] = *(p+5);
+			print_string(conv);
+			g = strtol(conv, NULL, 16);
+
+			conv[0] = *(p+6);
+			conv[1] = *(p+7);
+			print_string(conv);
+			b = strtol(conv, NULL, 16);
+
+			setcolor(id, r , g, b);
 			p=NULL;
 		}
 

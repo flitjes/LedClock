@@ -15,7 +15,7 @@
  *  ==== ALL OTHER CHANGES WILL BE OVERWRITTEN WHEN IT IS REGENERATED ====
  *
  *  This file was generated from
- *      /opt/ti/grace_3_10_00_82/packages/ti/mcu/msp430/csl/communication/USCI_A0_init.xdt
+ *      /home/flitjesdev/ti/grace_3_10_00_82/packages/ti/mcu/msp430/csl/communication/USCI_A0_init.xdt
  */
 
 #include <msp430.h>

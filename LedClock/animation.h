@@ -19,11 +19,10 @@ typedef enum {
 
 extern LED time_color_hour;
 extern LED time_color_minute;
-extern LED time_color_second;
-extern LED normal_color;
+
 extern uint16_t brightness;
 
 extern void show_clock(struct time_t* time);
-void setcolor(uint8_t id, uint8_t r, uint8_t g, uint8_t b);
+extern void setcolor(uint8_t id, uint8_t r, uint8_t g, uint8_t b);
 
 #endif /* COLORS_H_ */

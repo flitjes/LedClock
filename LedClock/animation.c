@@ -108,11 +108,17 @@ void show_clock(struct time_t* time){
         hour_fill_stop = led_hour - hour_off;
 
 
-        minute_fill_start -= max_led_cout;
-        minute_fill_stop -= max_led_cout;
+        if(minute_fill_start > max_led_cout)
+        	minute_fill_start -= max_led_cout;
 
-        hour_fill_start -= max_led_cout;
-        hour_fill_stop -= max_led_cout;
+        if(minute_fill_stop > max_led_cout)
+        	minute_fill_stop -= max_led_cout;
+
+        if(hour_fill_start > max_led_cout)
+        	hour_fill_start -= max_led_cout;
+
+        if(hour_fill_stop > max_led_cout)
+        	hour_fill_stop -= max_led_cout;
 
 
         if(minute_fill_start >= NUM_LEDS)
@@ -127,8 +133,6 @@ void show_clock(struct time_t* time){
         if(hour_fill_stop >= NUM_LEDS)
         	hour_fill_stop -= 60;
 
-        sprintf(debug_str, "ms %d me %d hs %d he %d\n", minute_fill_start, minute_fill_stop, hour_fill_start, hour_fill_stop);
-        print_string(debug_str);
         if(led_hour > led_minute){
             setColorLength(minute_fill_start, hour_fill_stop, &time_color_minute, &time_color_minute, 0);
             setColorLength(minute_fill_stop, minute_fill_start, &time_color_off, &time_color_off, 0);
@@ -146,7 +150,6 @@ void show_clock(struct time_t* time){
 
        	if(led_minute <= (led_hour + minute_off * 2 + hour_off) && led_minute >= (led_hour - minute_off * 2- hour_off)){
         	setLedColorBrCtrl(led_minute - max_led_cout, &time_color_minute);
-        	setLedColorBrCtrl(led_hour - max_led_cout, &time_color_hour);
         }
 		showStrip();
 		ongoing = 0;
@@ -154,17 +157,17 @@ void show_clock(struct time_t* time){
 }
 
 void setcolor(uint8_t id, uint8_t r, uint8_t g, uint8_t b){
-	LED setcolor_to;
-	setcolor_to.red = r;
-	setcolor_to.green = g;
-	setcolor_to.blue = b;
-	switch(id){
-	case HOUR:
-		memcpy(&time_color_hour, &setcolor_to, sizeof(LED));
-		break;
-	case MINUTE:
-		memcpy(&time_color_minute, &setcolor_to, sizeof(LED));
-		break;
-	}
 
+	switch(id){
+		case HOUR:
+			time_color_hour.red = r;
+			time_color_hour.green = g;
+			time_color_hour.blue = b;
+			break;
+		case MINUTE:
+			time_color_minute.red = r;
+			time_color_minute.green = g;
+			time_color_minute.blue = b;
+			break;
+	}
 }

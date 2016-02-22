@@ -17,7 +17,7 @@
 #include "debug.h"
 #include "DS1307.h"
 
-uint8_t allignment_offset = 30;
+uint8_t allignment_offset = 31;
 /*
  *  ======== main ========
  */
@@ -75,6 +75,7 @@ int main(void)
 
 					if(P1IN & BIT4){
 						show_clock(&current);
+
 					} else {
 						fillStrip(0x00, 0x00, 0x00);
 					}
