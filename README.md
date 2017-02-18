@@ -9,6 +9,7 @@ Besides the software I've made a 3D drawing which will be milled out of a mix
 of materials, plexiglas, carbonfiber and MDF.
 
 Protocol:
+Set the time
 time=12:10:04
 start
 
@@ -17,9 +18,12 @@ id 0 = HOUR
 id 1 = MINUTE
 id 2 = SECOND (not implemented)
 id 3 = BACKGROUND (not implemented)
+
+Set the color
 setcolor=0ffddff
 start
 
-nc -l -u 12345
+Example with netcat
+nc -u 192.168.4.1 12345
 setcolor=0ff00ff
 
