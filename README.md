@@ -7,3 +7,19 @@ and be energy sufficient.
 
 Besides the software I've made a 3D drawing which will be milled out of a mix
 of materials, plexiglas, carbonfiber and MDF.
+
+Protocol:
+time=12:10:04
+start
+
+setcolor=[id][rgb code]
+id 0 = HOUR
+id 1 = MINUTE
+id 2 = SECOND (not implemented)
+id 3 = BACKGROUND (not implemented)
+setcolor=0ffddff
+start
+
+nc -l -u 12345
+setcolor=0ff00ff
+
